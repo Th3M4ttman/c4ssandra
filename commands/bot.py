@@ -1,5 +1,8 @@
 from discord.ext.commands import Bot
 import discord
+import os
+
+ROOT = os.path.abspath("/".join(__file__.split("/")[0:-1]))
 
 intents = discord.Intents.default()
 intents.members = True

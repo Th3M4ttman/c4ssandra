@@ -1,15 +1,15 @@
 
 import json
-from .bot import cassandra, has_role
+from .bot import cassandra, has_role, ROOT
 import discord
 import humanize
 
 def load():
-	with open("/storage/emulated/0/C4ssandra/Bot/commands/gbp.json") as f:
+	with open(ROOT+"/gbp.json") as f:
 		return json.loads("".join(f.readlines()))
 
 def save(points):
-	with open("/storage/emulated/0/C4ssandra/Bot/commands/gbp.json", "w") as f:
+	with open(ROOT+"/gbp.json", "w") as f:
 		f.write(json.dumps(points, indent=4))
 
 

@@ -1,5 +1,5 @@
 from asyncio import sleep
-from .bot import cassandra, has_role
+from .bot import cassandra, has_role, ROOT
 import random
 from discord import Message, Reaction
 import time
@@ -146,7 +146,7 @@ async def game(ctx):
 		return
 			
 	allowed_mentions = discord.AllowedMentions(everyone = True)
-	game = await ctx.send(content = f"{ctx.message.author.mention}:\nGame‽ @everyone :regional_indicator_g::regional_indicator_a::regional_indicator_m::regional_indicator_e::interrobang:", allowed_mentions = allowed_mentions, file=discord.File("/storage/emulated/0/C4ssandra/Bot/commands/game.jpeg"))
+	game = await ctx.send(content = f"{ctx.message.author.mention}:\nGame‽ @everyone :regional_indicator_g::regional_indicator_a::regional_indicator_m::regional_indicator_e::interrobang:", allowed_mentions = allowed_mentions, file=discord.File(ROOT+"/game.jpeg"))
 	await ctx.message.delete()
 	await game.add_reaction("👍")
 	await game.add_reaction("👎")
@@ -161,7 +161,7 @@ async def spam(ctx, member: discord.Member):
 		i += 1
 		if i >= 60:
 			return
-		msg = await member.send(f"Game? {member.mention}", file=discord.File("/storage/emulated/0/C4ssandra/Bot/commands/game.jpeg"))
+		msg = await member.send(f"Game? {member.mention}", file=discord.File(ROOT + "/game.jpeg"))
 		await msg.add_reaction("👍")
 		await msg.add_reaction("👎")
 		def check(reaction, user):
