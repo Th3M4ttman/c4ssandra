@@ -79,19 +79,27 @@ shop = {"Custom Role":1000, "1 week lounge pass":200}
 @cassandra.command(name="buy")
 async def buy(ctx, item=None):
 	if item is None:
-		out = "Welcome to the shop! What do you want to buy"
-		ind = 0
+		out = "Welcome to the shop! What do you want to buy\n"
+		ind = 1
 		for k, i in shop.items():
 			out += f"{ind}: {k} - ¥{i}\n"
+			ind += 1
 		await ctx.message.reply(out)
 	elif item not in shop.keys():
 		await ctx.message.reply("Not for sale")
 		return
+	elif item.isnumeric():
+		if int(item) > len(shop.keys()) or int(item) <= 0:
+			await ctx.message.reply("Not for sale")
+			return
+		item = shop.keys()[int(item) - 1]
+		
+		
 	
 	cost = shop[item]
 	
 	if get_gbp(ctx.message.author) >= cost:
-		await ctx.message.reply(f"{ctx.message.author} bought a {item} all for ¥{cost}")
+		await ctx.message.reply(f"{ctx.message.author} bought a {item} for ¥{cost}")
 		add_gbp(ctx.message.author.mention, -cost)
 		await get_gbp(ctx)
 	else:
