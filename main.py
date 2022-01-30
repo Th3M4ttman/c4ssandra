@@ -5,6 +5,11 @@
 import discord
 from commands.bot import cassandra
 
+import os
+KEY = os.environ['BOTKEY']
 
 
-cassandra.run("OTM2NzYzNTAzMzAwMTkwMjQ5.YfR6_w.T8hsXO64ASHrjD_QfcOLSkMiqMM")
+cassandra.run(KEY)
+
+
+
