@@ -99,7 +99,7 @@ async def buy(ctx, item=None):
 	cost = shop[item]
 	
 	if get_gbp(ctx.message.author) >= cost:
-		await ctx.message.reply(f"{ctx.message.author} bought a {item} for ¥{cost}")
+		await ctx.message.reply(f"{ctx.message.author} bought a {item} for ¥{humanize.intcomma(cost)}")
 		add_gbp(ctx.message.author.mention, -cost)
 		await get_gbp(ctx)
 	else:
