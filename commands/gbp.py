@@ -77,7 +77,7 @@ async def givegbp(ctx, value: int, god = None):
 shop = {"Custom Role":1000, "1 week lounge pass":200}
 
 @cassandra.command(name="buy")
-async def buy(ctx, item):
+async def buy(ctx, item=None):
 	if item is None:
 		out = "Welcome to the shop! What do you want to buy"
 		ind = 0
