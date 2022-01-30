@@ -86,15 +86,17 @@ async def buy(ctx, item=None):
 			ind += 1
 		await ctx.message.reply(out)
 		return
-	elif item not in shop.keys():
-		await ctx.message.reply("Not for sale")
-		return
+		
 	elif item.isnumeric():
 		if int(item) > len(shop.keys()) or int(item) <= 0:
 			await ctx.message.reply("Not for sale")
 			return
 		item = shop.keys()[int(item) - 1]
 		
+	elif item not in shop.keys():
+		await ctx.message.reply("Not for sale")
+		return
+	
 		
 	
 	cost = shop[item]
