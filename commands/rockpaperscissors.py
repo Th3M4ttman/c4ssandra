@@ -1,0 +1,110 @@
+from .bot import cassandra
+import random
+from discord import Message, Reaction
+import time
+
+
+def wait_for_react(player, message: Message):
+	while True:
+		for react in message.reactions:
+			print(react)
+			if str(react) in  ("🪨", "📃", "✂️"):
+				print(react.users)
+				if player in list(react.users):
+					return str(react), player
+			
+
+def wait_for_thumb(player, bot, message, timeout = 10):
+	elapsed = 0
+	while True:
+		for react in message.reactions:
+			react = Reaction
+			if str(react) == "👍":
+				for user in react.users:
+					if user not in (player, bot):
+						return user
+		time.sleep(.1)
+		if elapsed >= timeout:
+			raise TimeoutError("Timeout")
+		elapsed += .1
+	
+
+
+def rock_paper_scissors(x, y):
+	if x == 0:
+		if y == 0:
+			return 2
+		elif y == 1:
+			return 1
+		else:
+			return 0
+	elif x == 1:
+		if y == 0:
+			return 0
+		elif y == 1:
+			return 2
+		else:
+			return 1
+	else:
+		if y == 0:
+			return 1
+		elif y == 1:
+			return 0
+		else:
+			return 2
+			
+def rps_game(players, moves):
+	player1, player2 = players
+	move1, move2 = moves
+	emoji = ("🪨", "📃", "✂️")
+	result = rock_paper_scissors(move1, move2)
+	out = str(player1.mention) + "   " +  emoji[move1] + "  -vs-  " + emoji[move2] + "   " + str(player2.mention) +"\n"
+	if result == 2:
+		out += "\nIts a Draw!"
+	elif result == 0:
+		out += f"\n{player1.mention} Wins!"
+	elif result == 1:
+		out += f"\n{player2.mention} Wins!"
+	return out
+
+@cassandra.command(name="rps", help="Play rock paper scissors")
+async def rps(message):
+	player1 = message.author
+	print(player1)
+	invite = await message.channel.send(f"{player1.mention} wants to play rock paper scissors, react with a thumbs up to play against them")
+	await invite.add_reaction("👍")
+	def check(reaction, user):
+		return user not in (player1, invite.author) and str(reaction.emoji) == '👍'	
+	try:
+		_, player2 = await cassandra.wait_for('reaction_add', timeout=10.0, check=check)
+	except:
+		player2 = message.guild.get_member(936763503300190249)
+		
+	await invite.delete()
+	announce = await message.channel.send(f"{player1.mention} vs {player2.mention}")
+	x = await player1.send("Select your move")
+	await x.add_reaction("🪨")
+	await x.add_reaction("📃")
+	await x.add_reaction("✂️")
+	def checkmove1(reaction, user):
+		print(str(reaction.emoji))
+		return user == player1 and str(reaction.emoji) in ("🪨", "📃", "✂️")
+	move1, player1 = await cassandra.wait_for('reaction_add',  check=checkmove1)
+	move1 = ("🪨", "📃", "✂️").index(str(move1))
+			
+			
+	if player2 == invite.author:
+		move2 = random.randint(0,2)
+	else:
+		x = await player2.send("Select your move")
+		await x.add_reaction("🪨")
+		await x.add_reaction("📃")
+		await x.add_reaction("✂️")
+		def checkmove2(reaction, user):
+			return user == player2 and str(reaction.emoji) in ("🪨", "📃", "✂️")
+		move2, player2 = await cassandra.wait_for('reaction_add',  check=checkmove2)
+		move2 = ("🪨", "📃", "✂️").index(str(move2))
+	
+	await announce.delete()
+	await message.channel.send(rps_game((player1, player2), (move1, move2)))
+	await message.message.delete()
