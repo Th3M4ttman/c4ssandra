@@ -5,6 +5,7 @@ from discord import Message, Reaction
 import time
 from . import rockpaperscissors
 from . import gbp
+import datetime
 
 @cassandra.command(name="test", help="Simple test")
 async def test(ctx):
@@ -79,7 +80,7 @@ class Decisions(discord.ext.commands.Cog):
 			await sleep(1)
 			elapsed += 1
 			
-			await v.edit(content=f"Time Remaining: {int(t-elapsed)}\n" + out)
+			await v.edit(content=f"Time Remaining: {datetime.timedelta(seconds=int(t-elapsed))}\n" + out)
 		
 		v = await v.channel.fetch_message(v.id)
 		
