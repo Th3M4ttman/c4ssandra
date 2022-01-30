@@ -85,6 +85,7 @@ async def buy(ctx, item=None):
 			out += f"{ind}: {k} - ¥{i}\n"
 			ind += 1
 		await ctx.message.reply(out)
+		return
 	elif item not in shop.keys():
 		await ctx.message.reply("Not for sale")
 		return
