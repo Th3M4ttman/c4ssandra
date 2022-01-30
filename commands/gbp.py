@@ -91,7 +91,7 @@ async def buy(ctx, item=None):
 		if int(item) > len(shop.keys()) or int(item) <= 0:
 			await ctx.message.reply("Not for sale")
 			return
-		item = shop.keys()[int(item) - 1]
+		item = list(shop.keys())[int(item) - 1]
 		
 	elif item not in shop.keys():
 		await ctx.message.reply("Not for sale")
