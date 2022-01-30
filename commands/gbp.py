@@ -82,7 +82,7 @@ async def buy(ctx, item=None):
 		out = "Welcome to the shop! What do you want to buy\n"
 		ind = 1
 		for k, i in shop.items():
-			out += f"{ind}: {k} - ¥{i}\n"
+			out += f"{ind}: {k} - ¥{humanize.intcomma(i)}\n"
 			ind += 1
 		await ctx.message.reply(out)
 		return
