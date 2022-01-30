@@ -74,13 +74,26 @@ async def givegbp(ctx, value: int, god = None):
 	await ctx.channel.send(f"{str(ctx.message.author).split('#')[0]} Sent {v} Good Boi Points to {m}"if value > 0 else f"Took {v} Good Boi Points from {m}")
 	await ctx.message.delete()
 
+shop = {"Custom Role":1000, "1 week lounge pass":200}
+
 @cassandra.command(name="buy")
-async def buy(ctx):
-	cost = 100
+async def buy(ctx, item):
+	if item is None:
+		out = "Welcome to the shop! What do you want to buy"
+		ind = 0
+		for k, i in shop.items():
+			out += f"{ind}: {k} - ¥{i}\n"
+		await ctx.message.reply(out)
+	elif item not in shop.keys():
+		await ctx.message.reply("Not for sale")
+		return
+	
+	cost = shop[item]
+	
 	if get_gbp(ctx.message.author) >= cost:
-		await ctx.channel.send(f"{ctx.message.author} bought fuck all for ¥100")
-		add_gbp(ctx.message.author.mention, -100)
+		await ctx.message.reply(f"{ctx.message.author} bought a {item} all for ¥{cost}")
+		add_gbp(ctx.message.author.mention, -cost)
 		await get_gbp(ctx)
 	else:
-		await ctx.channel.send("you cannot afford it")
+		await ctx.message.reply("you cannot afford it")
 	
