@@ -208,4 +208,13 @@ async def say(ctx:discord.ext.commands.Context):
 		await ctx.message.delete()
 	except:
 		pass
+
+@cassandra.command(name="say")
+async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
+	content = " ".join(ctx.message.content.split(" ")[2:])
+	channels = cassandra.get_all_channels()
+	for ch in channels:
+		if ch == str(channel):
+			await channel.send(content=content)
+	print("yo")
 	
