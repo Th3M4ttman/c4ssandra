@@ -207,4 +207,5 @@ async def say(ctx:discord.ext.commands.Context):
 	
 	
 	await ctx.message.channel.send(words, files=att)
+	await ctx.message.delete()
 	
