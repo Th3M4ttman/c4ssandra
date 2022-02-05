@@ -183,3 +183,7 @@ async def minrals(message):
 cassandra.triggers["lad"] = lads
 cassandra.triggers["minerals"] = minrals
 cassandra.triggers["minrals"] = minrals
+
+@cassandra.command(name="lmgtfy", help="let me google that for you")
+async def lmgtfy(ctx, term):
+	ctx.message.reply(f"https://lmgtfy.app/?q={term.replace(' ', '+')}")
