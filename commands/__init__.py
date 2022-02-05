@@ -187,5 +187,5 @@ cassandra.triggers["minrals"] = minrals
 @cassandra.command(name="lmgtfy", help="let me google that for you")
 async def lmgtfy(ctx, *term):
 	term = "+".join(term)
-	await ctx.channel.send(f"https://letmegooglethat.com/?q={term}")
+	await ctx.channel.send(embed=f"<https://letmegooglethat.com/?q={term}>")
 	await ctx.message.delete()
