@@ -204,5 +204,8 @@ async def say(ctx:discord.ext.commands.Context):
 			words = "!say ".join(words)
 	
 	await ctx.message.channel.send(words)
-	await ctx.message.delete()
+	try:
+		await ctx.message.delete()
+	except:
+		pass
 	
