@@ -78,7 +78,7 @@ class Decisions(discord.ext.commands.Cog):
 		started = datetime.datetime.now()
 		while datetime.datetime.now() - started < datetime.timedelta(seconds=t):
 			await sleep(1)
-			await v.edit(content=f"Time Remaining: {datetime.datetime.now() - started}\n" + out)
+			await v.edit(content=f"Time Remaining: {str(datetime.datetime.now() - started).split('.')[0]}\n" + out)
 		
 		v = await v.channel.fetch_message(v.id)
 		
