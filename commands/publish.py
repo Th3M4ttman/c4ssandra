@@ -4,7 +4,7 @@ import shutil
 
 for base, dirs, files in os.walk("/storage/emulated/0/C4ssandra/Bot/commands"):
 	for file in files:
-		if dirs != ["__pycache__"]:
+		if dirs != ["__pycache__"] or ".json" in file or ".joblib" in file:
 			continue
 		
 		
