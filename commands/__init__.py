@@ -75,12 +75,10 @@ class Decisions(discord.ext.commands.Cog):
 		for i, subject in enumerate(subjects):
 			await v.add_reaction(nums[i])
 			
-		elapsed = 0
-		while elapsed < t:
+		started = datetime.datetime.now()
+		while datetime.datetime.now() - started < datetime.timedelta(seconds=t):
 			await sleep(1)
-			elapsed += 1
-			
-			await v.edit(content=f"Time Remaining: {datetime.timedelta(seconds=int(t-elapsed))}\n" + out)
+			await v.edit(content=f"Time Remaining: {datetime.datetime.now() - started}\n" + out)
 		
 		v = await v.channel.fetch_message(v.id)
 		
@@ -213,9 +211,10 @@ async def say(ctx:discord.ext.commands.Context):
 async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
 	content = " ".join(ctx.message.content.split(" ")[2:])
 	channels = cassandra.get_all_channels()
-	print(channel)
 	for ch in channels:
-		print("   ", ch)
 		if str(ch) == channel:
 			await ch.send(content=content)
-	
+	try:
+		await ctx.message.delete()
+	except:
+		pass
