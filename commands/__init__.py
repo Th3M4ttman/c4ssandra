@@ -188,7 +188,8 @@ cassandra.triggers["minrals"] = minrals
 async def lmgtfy(ctx, *term):
 	term = "+".join(term)
 	embed = discord.Embed()
-	embed.description = f"[link](https://letmegooglethat.com/?q={term})"
+	file = discord.File(ROOT+"/kbl.jpeg")
+	embed.description = f"[Allow me...](https://letmegooglethat.com/?q={term})"
 	
-	await ctx.channel.send(embed=embed)
+	await ctx.channel.send(embed=embed, file=file)
 	await ctx.message.delete()
