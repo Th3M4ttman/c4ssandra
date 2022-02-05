@@ -193,3 +193,18 @@ async def lmgtfy(ctx, *term):
 	
 	await ctx.channel.send(embed=embed, file=file)
 	await ctx.message.delete()
+	
+@cassandra.command(name="say")
+async def say(ctx:discord.ext.commands.Context):
+	words = ctx.message.content.split("!say")
+	if type(words) in (tuple, list):
+		if len(words) == 1:
+			words = words[0]
+		else:
+			words = "!say".join(words)
+			
+	att = ctx.message.attachments
+	
+	
+	await ctx.message.channel.send(words, files=att)
+	
