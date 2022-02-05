@@ -202,10 +202,7 @@ async def say(ctx:discord.ext.commands.Context):
 			words = words[0]
 		else:
 			words = "!say ".join(words)
-			
-	att = ctx.message.attachments
 	
-	
-	await ctx.message.channel.send(words, files=att)
+	await ctx.message.channel.send(words)
 	await ctx.message.delete()
 	
