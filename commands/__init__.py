@@ -213,7 +213,9 @@ async def say(ctx:discord.ext.commands.Context):
 async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
 	content = " ".join(ctx.message.content.split(" ")[2:])
 	channels = cassandra.get_all_channels()
+	print(channel)
 	for ch in channels:
-		if ch == str(channel):
+		print("   ", ch)
+		if str(ch) == channel:
 			await channel.send(content=content)
 	
