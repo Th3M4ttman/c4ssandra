@@ -196,12 +196,12 @@ async def lmgtfy(ctx, *term):
 	
 @cassandra.command(name="say")
 async def say(ctx:discord.ext.commands.Context):
-	words = ctx.message.content.split("!say")
+	words = ctx.message.content.split("!say ")[1]
 	if type(words) in (tuple, list):
 		if len(words) == 1:
 			words = words[0]
 		else:
-			words = "!say".join(words)
+			words = "!say ".join(words)
 			
 	att = ctx.message.attachments
 	
