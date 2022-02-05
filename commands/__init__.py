@@ -216,5 +216,4 @@ async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
 	for ch in channels:
 		if ch == str(channel):
 			await channel.send(content=content)
-	print("yo")
 	
