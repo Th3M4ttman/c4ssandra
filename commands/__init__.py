@@ -209,7 +209,7 @@ async def say(ctx:discord.ext.commands.Context):
 	except:
 		pass
 
-@cassandra.command(name="say")
+@cassandra.command(name="sayin")
 async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
 	content = " ".join(ctx.message.content.split(" ")[2:])
 	channels = cassandra.get_all_channels()
