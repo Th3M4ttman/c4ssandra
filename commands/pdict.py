@@ -2,6 +2,7 @@ from collections import UserDict
 import os
 import json
 from copy import deepcopy
+root = "/".join(__file__.split("/")[0:-1])
 
 class pdict(dict):
 	
@@ -15,8 +16,8 @@ class pdict(dict):
 	def load(self, *args, **kwargs):
 		for k, i in self.defaults.items():
 				self.data[k]= i
-		if os.path.exists(self.data["path"]):
-			with open(self.data["path"]) as f:
+		if os.path.exists(root+self.data["file"]):
+			with open(root+self.data["file"]) as f:
 				data = json.loads("".join(f.readlines()))
 			for k, i in data.items():
 				self.data[k]= i
@@ -30,7 +31,7 @@ class pdict(dict):
 		
 	
 	def save(self):
-		with open(self.data["path"], "w") as f:
+		with open(root+self.data["file"], "w") as f:
 			f.write(json.dumps(self.data, indent=4))
 	
 	@property
