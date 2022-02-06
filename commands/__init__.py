@@ -19,6 +19,7 @@ async def clear(ctx):
 		return
 	messages = await ctx.channel.history().flatten()
 	await ctx.channel.purge()
+	await bs(ctx)
 	
 @cassandra.command(name="python", help="run python")
 async def python(ctx):
@@ -122,7 +123,8 @@ async def cs(ctx):
 	messages = await ctx.channel.history().flatten()
 	for message in messages:
 		if message.author == cassandra.user or message.content.startswith("!"):
-			await bs(ctx)
+			await message.delete()
+	await bs(ctx)
 	
 
 @cassandra.command(name="game")
