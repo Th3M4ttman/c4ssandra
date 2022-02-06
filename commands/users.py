@@ -123,6 +123,8 @@ class UserStore(pdict):
 		
 		out = {}
 		for id, user in self.data["users"].items():
+			if type(user) == User:
+				user = user.to_json()
 			out[id] = User(id, user["gbp"], user["inventory"], user["exp"])
 		return out
 		
