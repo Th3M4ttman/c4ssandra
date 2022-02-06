@@ -5,7 +5,7 @@ error = False
 
 p = "/storage/emulated/0/C4ssandra/Bot/commands"
 t = "/data/data/com.termux/files/home/storage/Programming/Bot/commands"
-for root, folders, files in os.walk(p, topdown=False):
+for root, folders, files in os.walk(p):
 	#print(root, folders, files)
 	if "__pycache__" in root:
 		continue
