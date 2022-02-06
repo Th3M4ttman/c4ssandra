@@ -22,6 +22,7 @@ class pdict():
 			for k, i in data.items():
 				self.data[k]= i
 		else:
+			print(root+self.data["file"], "doesnt exist bitch")
 			self.save()
 			return self.load()
 			
@@ -32,7 +33,7 @@ class pdict():
 	
 	def save(self):
 		with open(self.data["file"], "w") as f:
-			f.write(json.dumps(self.data, indent=4))
+			f.write(json.dumps(self.data , indent=4))
 	
 	@property
 	def path(self):
@@ -53,39 +54,13 @@ class pdict():
 	
 	def __setitem__(self, key, value):
 		self.data[key] = value
-		self.save()
 		return self.data[key]
 	
-	"""
-		
-	def __getattr__(self, name):
-		return super().__getattribute__(name)
-	
-	def __setattr__(self, name, value):
-		try:
-			if name in ("data", "ctx", "defaults"):
-				super().__setattr__(name, value)
-			else:
-				raise ValueError("Nah")
-			super().__getattribute__(name)
-		except Exception as e:
-			#print(e)
-			self[name] = value
-	"""
-			
 	def clear(self):
 		os.remove(self.path)
 		self.data = dict(file=self["file"], **self.defaults)
 		self.load()
 		
-	def __missing__(self, x):
-		for _x in [x, x.title(), x.lower(), x.upper()]:
-			
-			try:
-				return self.defaults[_x]
-			except:
-				pass
-		return None
 	
 	def __str__(self):
 		return f"{self.__class__.__name__}: " + json.dumps(self.data, indent=4)
