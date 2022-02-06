@@ -240,7 +240,7 @@ async def bs(ctx:discord.ext.commands.Context):
 	channels = cassandra.get_all_channels()
 	out = []
 	for ch in channels:
-		if str(ch) == "Bot_Spam":
+		if str(ch) == "bot_spam":
 			out.append(await ch.send(content=content))
 			
 			
