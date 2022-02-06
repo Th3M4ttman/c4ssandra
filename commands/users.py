@@ -137,7 +137,10 @@ class UserStore(pdict):
 			if str(user.id) in u.keys():
 				raise ValueError("User already exists")
 		else:
-			user = User(user)
+			if str(user) in u.keys():
+				user = User(user)
+			else:
+				raise ValueError("User already exists")
 			
 		self.update_user(user)
 		return user
@@ -154,9 +157,9 @@ class UserStore(pdict):
 		self.save()
 		
 	def get_user(self, id):
-		for user in self.users:
-			if str(user.id) == str(id):
-				return user
+		for i, user in self.users.items():
+			if str(i) == str(id):
+				return User(id, data=user)
 		print(id, "Not Found")
 		return None
 
