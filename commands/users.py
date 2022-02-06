@@ -139,11 +139,10 @@ class UserStore(pdict):
 		if type(user) == User:
 			if str(user.id) in u.keys():
 				raise ValueError("User already exists")
-		elif type(user) in (int, str):
-			u[str(user)] = User(str(user)).to_json()
-		
-		self.users = deepcopy(u)
-		self.save()
+		else:
+			user = User(user)
+			
+		self.update_user(user)
 		return user
 		
 	def del_user(self, user:str):
