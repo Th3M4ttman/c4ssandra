@@ -259,3 +259,8 @@ async def clearusers(ctx):
 	await ctx.message.delete()
 	US.users = dict()
 	await ctx.channel.send("Cleared users")
+	
+try:
+	US.add_user(str(cassandra.user.id))
+except:
+	pass
