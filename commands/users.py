@@ -137,7 +137,7 @@ class UserStore(pdict):
 		users = self.users
 		if str(user.id) in users.keys():
 			raise ValueError("User already exists")
-		users[user.id] = user.to_json()
+		users[user.id if type(user) == User else str(user)] = user.to_json()
 		self.users = users
 		self.save()
 		return user
