@@ -18,8 +18,7 @@ for root, folders, files in os.walk(p, topdown=False):
 					os.mkdir((root + "/" + folder).replace(p, t))
 					print("Created", folder)
 				except Exception as e:
-					print(e)
-					error = True
+					pass
 				
 	for file in files:
 		if ".json" in file:

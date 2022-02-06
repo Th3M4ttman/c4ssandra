@@ -4,8 +4,10 @@ import random
 from discord import Message, Reaction
 import time
 from . import rockpaperscissors
-from . import gbp
+from . import users
 import datetime
+
+""" test """
 
 @cassandra.command(name="test", help="Simple test")
 async def test(ctx):
