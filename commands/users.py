@@ -218,6 +218,10 @@ from discord.ext.commands import Context
 
 @cassandra.command(name="gbp")
 async def gbp(ctx:Context, action=None, n:int = 0):
+	try:
+		US.add_user(str(cassandra.user.id))
+	except:
+		pass
 	user = US.get_user(ctx.author.id)
 	print("User=", user)
 	#await bs(ctx)
@@ -260,7 +264,3 @@ async def clearusers(ctx):
 	US.users = dict()
 	await ctx.channel.send("Cleared users")
 	
-try:
-	US.add_user(str(cassandra.user.id))
-except:
-	pass
