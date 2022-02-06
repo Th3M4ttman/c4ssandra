@@ -10,6 +10,7 @@ import datetime
 @cassandra.command(name="test", help="Simple test")
 async def test(ctx):
 	await ctx.channel.send("Test success")
+	await bs(ctx)
 
 import discord
 @cassandra.command(name="clear", help="Clear the log")
@@ -27,6 +28,7 @@ async def python(ctx):
 			await ctx.channel.send(eval(out))
 	except Exception as e:
 		await ctx.channel.send(e)
+	await bs(ctx)
 
 class Decisions(discord.ext.commands.Cog):
 	""" decide upon things """
@@ -39,7 +41,7 @@ class Decisions(discord.ext.commands.Cog):
 		choices_str = " | ".join(choices)
 		result = await ctx.channel.send(f"Deciding between:  {choices_str}")
 		remaining = result.content.split("  ")[1].split(" | ")
-		await ctx.message.delete()
+		await bs(ctx)
 		while len(remaining) > 1:
 			
 			time.sleep(1)
@@ -74,7 +76,8 @@ class Decisions(discord.ext.commands.Cog):
 		v = await ctx.channel.send(out)
 		for i, subject in enumerate(subjects):
 			await v.add_reaction(nums[i])
-			
+		
+		await bs(ctx)
 		started = datetime.datetime.now()
 		while datetime.datetime.now() - started < datetime.timedelta(seconds=t):
 			await sleep(1)
@@ -119,7 +122,7 @@ async def cs(ctx):
 	messages = await ctx.channel.history().flatten()
 	for message in messages:
 		if message.author == cassandra.user or message.content.startswith("!"):
-			await message.delete()
+			await bs(ctx)
 	
 
 @cassandra.command(name="game")
@@ -146,7 +149,7 @@ async def game(ctx):
 			
 	allowed_mentions = discord.AllowedMentions(everyone = True)
 	game = await ctx.send(content = f"{ctx.message.author.mention}:\nGame‽ @everyone :regional_indicator_g::regional_indicator_a::regional_indicator_m::regional_indicator_e::interrobang:", allowed_mentions = allowed_mentions, file=discord.File(ROOT+"/game.jpeg"))
-	await ctx.message.delete()
+	await bs(ctx)
 	await game.add_reaction("👍")
 	await game.add_reaction("👎")
 	await game.add_reaction("⏰")
@@ -190,7 +193,7 @@ async def lmgtfy(ctx, *term):
 	embed.description = f"[Allow me...](https://letmegooglethat.com/?q={term})"
 	
 	await ctx.channel.send(embed=embed, file=file)
-	await ctx.message.delete()
+	await bs(ctx)
 	
 @cassandra.command(name="say")
 async def say(ctx:discord.ext.commands.Context):
@@ -206,6 +209,7 @@ async def say(ctx:discord.ext.commands.Context):
 		await ctx.message.delete()
 	except:
 		pass
+	
 
 @cassandra.command(name="sayin")
 async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
@@ -214,7 +218,33 @@ async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
 	for ch in channels:
 		if str(ch) == channel:
 			await ch.send(content=content)
+			
 	try:
 		await ctx.message.delete()
 	except:
 		pass
+		
+async def bs(ctx:discord.ext.commands.Context):
+	msg = ctx.message
+	content = msg.content
+	author = msg.author.display_name
+	
+	content = "⚙️" + f"\nUser: {author}\nCommand: {content}"
+	
+	
+	channel = ctx.message.channel
+	try:
+		await ctx.message.delete()
+	except:
+		pass
+	channels = cassandra.get_all_channels()
+	out = []
+	for ch in channels:
+		if str(ch) == "Bot_Spam":
+			out.append(await ch.send(content=content))
+			
+			
+	
+	return out if len(out) > 1 else out[0] if len(out) == 1 else None
+		
+	
