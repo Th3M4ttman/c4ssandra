@@ -138,7 +138,7 @@ class UserStore(pdict):
 		if str(user.id) in u.keys():
 			raise ValueError("User already exists")
 		if type(user) in (int, str):
-			u[str(id)] = User(id).to_json()
+			u[str(user)] = User(user).to_json()
 		else:
 			u[str(user.id)] = user.to_json()
 		self.users = u
@@ -152,7 +152,7 @@ class UserStore(pdict):
 	
 	@users.setter
 	def users(self, value):
-		self.data["users"] = value
+		self.data["users"] = dict(value)
 		self.save()
 		
 	def get_user(self, id):
@@ -234,7 +234,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 		for mention in ctx.message.mentions:
 			rec = US.get_user(mention.id)
 			if rec is None:
-				US.add_user(User(mention.id))
+				US.add_user(mention.id)
 				rec = US.get_user(mention.id)
 			if not user.gbp >= n:
 				await ctx.message.reply("insufficient Funds")
