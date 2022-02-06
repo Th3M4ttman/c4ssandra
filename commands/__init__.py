@@ -10,7 +10,7 @@ import datetime
 @cassandra.command(name="test", help="Simple test")
 async def test(ctx):
 	await ctx.channel.send("Test success")
-	await bs(ctx)
+	await ctx.message.delete()
 
 import discord
 @cassandra.command(name="clear", help="Clear the log")
