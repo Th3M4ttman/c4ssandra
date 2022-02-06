@@ -217,10 +217,10 @@ from .bot import cassandra, bs
 from discord.ext.commands import Context
 
 @cassandra.command(name="gbp")
-async def gbp(ctx:Context, action=None):
+async def gbp(ctx:Context, action=None, n:int = 0):
 	user = US.get_user(ctx.author.id)
 	print("User=", user)
-	await bs(ctx)
+	#await bs(ctx)
 	if user is None:
 		US.add_user(User(ctx.author.id))
 		user = US.get_user(ctx.author.id)
@@ -229,6 +229,21 @@ async def gbp(ctx:Context, action=None):
 		dn = ctx.message.author.display_name
 		msg = f"Good Boy Points:\n\t{dn}: ¥{humanize.intcomma(user.gbp)}"
 		await ctx.message.channel.send(msg)
+	
+	if action == "give":
+		async for mention in ctx.message.mentons:
+			rec = US.get_user(mention.id)
+			if rec is None:
+				US.add_user(User(mention.id))
+				rec = US.get_user(mention.id)
+			if not user.gbp >= n:
+				await ctx.message.reply("insufficient Funds")
+				return
+			user.give_gbp(-n)
+			rec.give_gbp(n)
+		await ctx.channel.send(ctx.author.display_name + " sent ¥" + n + " to " + ",".join([str(x) for x in ctx.message.mentions]))
+			
+			
 		
 	
 @cassandra.command(name="users")
