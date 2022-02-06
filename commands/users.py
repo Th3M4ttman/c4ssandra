@@ -1,6 +1,7 @@
 from .pdict import pdict
 import json
 import  humanize
+from . import ROOT
 
 class Item():
 	def __init__(self, data:dict, itemstore=None):
@@ -185,7 +186,8 @@ class sod(Item):
 		
 
 
-US = UserStore("./users/users.json")
+
+US = UserStore(ROOT+"/users/users.json")
 IS = ItemStore(sod)
 """
 #y = User(0, 69, [], 420)
