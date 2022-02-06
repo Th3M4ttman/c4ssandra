@@ -88,8 +88,7 @@ def rps_game(players, moves):
 @cassandra.command(name="rps", help="Play rock paper scissors")
 async def rps(message):
 	player1 = message.author
-	print(player1)
-	await bs(ctx)
+	await bs(message)
 	invite = await message.channel.send(f"{player1.mention} wants to play rock paper scissors, react with a thumbs up to play against them")
 	await invite.add_reaction("👍")
 	def check(reaction, user):
@@ -126,4 +125,3 @@ async def rps(message):
 	
 	await announce.delete()
 	await message.channel.send(rps_game((player1, player2), (move1, move2)))
-	await message.message.delete()
