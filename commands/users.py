@@ -129,6 +129,9 @@ class UserStore(pdict):
 	def update_user(self, user:User):
 		users = self.users
 		users[user.id] = user.to_json()
+		for i, u in enumerate(users):
+			if type(u) == User:
+				users[i] = u.to_json()
 		self.users = users
 		
 		
