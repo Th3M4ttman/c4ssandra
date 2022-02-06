@@ -126,10 +126,7 @@ class UserStore(pdict):
 		
 	def update_user(self, user:User):
 		users = self.users
-		if str(user.id) in users.keys():
-			users[user.id] = user.to_json()
-		else:
-			raise ValueError("User doesnt exist")
+		users[user.id] = user.to_json()
 		self.users = users
 		self.save()
 		
