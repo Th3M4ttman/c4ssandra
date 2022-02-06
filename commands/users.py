@@ -158,7 +158,7 @@ class UserStore(pdict):
 	def get_user(self, id):
 		try:
 			for i, user in self.data["users"].items():
-				if i == id:
+				if str(i) == str(id):
 					return User(str(id), data=user, users=self)
 		except:
 			pass
@@ -222,7 +222,7 @@ async def gbp(ctx:Context, action=None):
 	print("User=", user)
 	await bs(ctx)
 	if user is None:
-		US.add_user(User(int(ctx.author.id)))
+		US.add_user(User(ctx.author.id))
 		user = US.get_user(ctx.author.id)
 		
 	if action == None:
