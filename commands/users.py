@@ -140,6 +140,7 @@ class UserStore(pdict):
 		users[user.id] = user.to_json()
 		self.users = users
 		self.save()
+		return user
 		
 	def del_user(self, user:str):
 		user = str(user)
@@ -153,7 +154,10 @@ class UserStore(pdict):
 		self.save()
 		
 	def get_user(self, id):
-		return User(str(id), data=self.users[str(id)], users=self)
+		for user in self.users:
+			if str(id) == user.id:
+				return User(str(id), data=self.users[str(id)], users=self)
+			return None
 
 class ItemStore():
 	def __init__(self, *items):
@@ -204,3 +208,20 @@ for i in y.inventory:
 print(y)
 #interp(locals(), globals())
 """
+from .bot import cassandra, bs
+from discord.ext.commands import Context
+
+@cassandra.command(name="gbp")
+async def gbp(ctx:Context, action=None):
+	user = US.get_user(ctx.author.id)
+	await bs(ctx)
+	if user is None:
+		user = US.add_user(User(ctx.author.id))
+	
+	if action == None:
+		dn = cassandra.get_user(user.id).display_name
+		msg = f"Good Boy Points:\n\t{dn}: ¥{humanize.intcomma(user.gbp)}"
+		await ctx.message.channel.send(msg)
+		
+	.
+		

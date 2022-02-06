@@ -7,7 +7,6 @@ from . import rockpaperscissors
 from . import users
 import datetime
 
-""" test """
 
 @cassandra.command(name="test", help="Simple test")
 async def test(ctx):
@@ -227,22 +226,4 @@ async def sayin(ctx:discord.ext.commands.Context, channel:str, content:str):
 		await ctx.message.delete()
 	except:
 		pass
-		
-async def bs(ctx:discord.ext.commands.Context):
-	msg = ctx.message
-	content = msg.content
-	author = msg.author.display_name
-	channel = msg.channel
-	
-	content = "⚙️" + f"\nUser: {author}\nChannel: {channel}\nCommand: {content}"
-	
-	
-	try:
-		await ctx.message.delete()
-	except:
-		pass
-	channels = cassandra.get_all_channels()
-	for ch in channels:
-		if str(ch) == "bot_spam":
-			return await ch.send(content=content)
-	
+

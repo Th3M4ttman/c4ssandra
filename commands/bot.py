@@ -48,4 +48,22 @@ async def has_role(who: discord.Member, guild = discord.Guild, role="Admin", mes
 	
 
 	
+		
+async def bs(ctx:discord.ext.commands.Context):
+	msg = ctx.message
+	content = msg.content
+	author = msg.author.display_name
+	channel = msg.channel
+	
+	content = "⚙️" + f"\nUser: {author}\nChannel: {channel}\nCommand: {content}"
+	
+	
+	try:
+		await ctx.message.delete()
+	except:
+		pass
+	channels = cassandra.get_all_channels()
+	for ch in channels:
+		if str(ch) == "bot_spam":
+			return await ch.send(content=content)
 	
