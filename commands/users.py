@@ -231,7 +231,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 		await ctx.message.channel.send(msg)
 	
 	if action == "give":
-		async for mention in ctx.message.mentions:
+		for mention in ctx.message.mentions:
 			rec = US.get_user(mention.id)
 			if rec is None:
 				US.add_user(User(mention.id))
