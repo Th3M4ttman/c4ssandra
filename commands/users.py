@@ -137,10 +137,12 @@ class UserStore(pdict):
 		users = self.users
 		if str(user.id) in users.keys():
 			raise ValueError("User already exists")
-		users[user.id if type(user) == User else str(user.id)] = user.to_json()
+		if type(user) == int:
+			users[str(id)] = User(id).to_json()
+		else:
+			users[str(user.id)] = user.to_json()
 		self.users = users
 		self.save()
-		return user
 		
 	def del_user(self, user:str):
 		user = str(user)
@@ -217,10 +219,11 @@ async def gbp(ctx:Context, action=None):
 	print("User=", user)
 	await bs(ctx)
 	if user is None:
-		user = US.add_user(User(int(ctx.author.id)))
-	
+		US.add_user(User(int(ctx.author.id)))
+		user = US.get_user(ctx.author.id)
+		
 	if action == None:
-		dn = cassandra.get_user(user.id).display_name
+		dn = ctx.message.author.display_name
 		msg = f"Good Boy Points:\n\t{dn}: ¥{humanize.intcomma(user.gbp)}"
 		await ctx.message.channel.send(msg)
 		
