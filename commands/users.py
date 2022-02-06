@@ -33,6 +33,8 @@ class Item():
 
 class User():
 	def __init__(self, id, gbp=0, inventory=[], exp=0, data = None, users = None):
+		if users == None:
+			users = US
 		self.users = users
 		if data:
 			gbp = data["gbp"]
@@ -138,7 +140,7 @@ class UserStore(pdict):
 				raise ValueError("User already exists")
 		else:
 			if str(user) in u.keys():
-				user = User(user)
+				user = User(user, users=self)
 			else:
 				raise ValueError("User already exists")
 			
@@ -159,7 +161,7 @@ class UserStore(pdict):
 	def get_user(self, id):
 		for i, user in self.users.items():
 			if str(i) == str(id):
-				return User(id, data=user.to_json())
+				return User(id, data=user.to_json(), users=self)
 		print(id, "Not Found")
 		return None
 
@@ -221,12 +223,13 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 	print("User=", user)
 	#await bs(ctx)
 	if user is None:
-		user = US.add_user(User(ctx.author.id))
+		user = US.add_user(User(ctx.author.id, users=US))
 		
 	if action == None:
 		dn = ctx.message.author.display_name
 		msg = f"Good Boy Points:\n\t{dn}: ¥{humanize.intcomma(user.gbp)}"
 		await ctx.message.channel.send(msg)
+		
 	elif action == "*":
 		user.give_gbp(n)
 		await ctx.channel.send(ctx.author.display_name + " recieved ¥" + humanize.intcomma(n))
@@ -236,7 +239,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 		for mention in ctx.message.mentions:
 			rec = US.get_user(mention.id)
 			if rec is None:
-				rec = US.add_user(User(mention.id))
+				rec = US.add_user(User(mention.id, users=US))
 			if not user.gbp >= n:
 				await ctx.message.reply("insufficient Funds")
 				return
