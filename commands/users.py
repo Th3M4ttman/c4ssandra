@@ -1,191 +1,204 @@
-import discord
+from pdict import pdict
 import json
-import humanize
+import  humanize
 
-def save(users):
-	with open("users.json", "w") as f:
-		f.write(json.dumps(users, indent=4, cls=CUencoder))
-
-def load():
-	with open("users.json") as f:
-		_u = json.loads("".join(f.readlines()))
-	for k, i in _u.items():
-		_u[k] = CassUser(k)
-		_u[k].from_str(i)
-	return _u
-		
-from json import JSONEncoder
-
-class CassUser():
-	def __init__(self, id, inventory=[], gbp =0):
-		self.id = id
-		self.inventory = list(inventory)
-		self.gbp = gbp
-	
-	def __iter__(self):
-		yield from {"id": self.id,
-		"inventory": [item.data for item in self.inventory],
-		"gbp": self.gbp}.items()
-	
-	def __str__(self):
-		return f"{self.id}"
-		
-	def __repr__(self):
-		return str(self)
-	
-	def to_json(self):
-		return json.dumps(dict(self), ensure_ascii=False)
-	
-	def from_str(self, str):
-		self.__dict__ = json.loads(str)
-	
-	def use(self, item, ctx):
-		found = False
-		for i in self.inventory:
-			if i.data["name"] == item:
-				item = i
-				found = True
-				break
-		if found:
-			return item.use(ctx, self)
-			
-class CUencoder(JSONEncoder):
-	def default(self, o:CassUser):
-		return o.to_json()
-		
-templates = {}
-def Use(self, ctx, user):
-	try:
-		return f"{user.name} Used {self.data['name']}"
-	except:
-		return ""
-	
 class Item():
-	def __init__(self, data = {"name":"item",
-												"value":0,}, use=Use):
-		self.data = data
-		self._use = use
+	def __init__(self, data:dict, itemstore=None):
+		self.name = list(data.keys())[0]
+		if itemstore is None:
+			global IS
+			itemstore = IS
+		
+		
+		self.data = data[self.name]
+		self.value = self.data["value"]
+		
+	def to_dict(self):
+		return {self.name: self.data}
 	
-	def use(self, ctx, user):
-		return self._use(self, ctx, user)
-			
-	def sell(self):
-		print("Sold", self.data["name"], "for ¥"+humanize.intcomma(self.data["value"]))
+	
+	def use(self, user):
+		print("Used", self.name)
+		user.remove_item(self)
+				
 	
 	def __str__(self):
-		return f"{self.data['name']}"
-	
+		return self.name
+		
 	def __repr__(self):
 		return str(self)
-			
+	
 
-class ItemTemplate():
-	def __init__(self, shop, name, price, use):
-		self.name = name
-		self.price = price
-		self.shop = shop
-		shop.add_item(self)
-		self.use = use
-		templates[name] = self
-		
-	def buy(self, user:CassUser):
-		print("Bought for ¥", humanize.intcomma(self.price), sep="")
-		if user.gbp >= self.price:
-			i = Item({"name":self.name, "value":self.price}, use=self.use)
-			user.inventory.append(i)
-			user.gbp -= self.price
-		else:
-			print("Insufficient Funds")
-			i = Item()
+class User():
+	def __init__(self, id, gbp=0, inventory=[], exp=0, data = None, users = None):
+		self.users = users
+		if data:
+			gbp = data["gbp"]
+			inventory = data["inventory"]
+			exp = data["exp"]
 			
-		return i
-		
-			
-class Shop():
-	def __init__(self):
-		self.welcome = "Welcome to the shop! What would you like to buy?"
-		self.items = []
+		self.id = id
+		self.gbp = gbp
+		self._inventory = inventory
+		self.exp = exp
 		
 	@property
-	def name_price(self):
-		return [[item.name, item.price] for item in self.items]
-	
-	def add_item(self, item):
-		if item not in self.items:
-			self.items.append(item)
-	
-	def add_items(self, *items):
-		for item in items:
-			self.add_item(item)
-			
-	def buy(self, item, user:CassUser):
-		if type(item) == int:
-			item = self.items[item]
-		else:
-			found = False
-			i = 0
-			for name, _ in self.name_price:
-				print(name, item)
-				if name.lower() == item.lower():
-					item = self.items[i]
-					found = True
-					break
-				i += 1
-			if found == False:
-				print("Not Found")
-				return
-		
-		return item.buy(user)
-	
-	def __str__(self):
-		out = self.welcome + "\n\n"
-		i = 1
-		for name, price in self.name_price:
-			out += f"{i}: {name} - ¥{humanize.intcomma(price)}"
-			i += 1
-		if i == 1:
-			return "Sorry Closed For Renovation"
+	def inventory(self):
+		global IS
+		out = []
+		for i, item in enumerate(self._inventory):
+			name = list(item.keys())[0]
+			item = IS.buy(name)
+			out.append(item)
 		return out
 	
-def Sod_use(self, ctx, user):
-	i = user.inventory.index(self)
-	user.inventory.pop(i)
-	return "killed people"
+	def to_json(self):
+		self.update_inventory()
+		return {"gbp":self.gbp, "inventory":self._inventory, "exp":self.exp}
+	
+	def __str__(self):
+		return f"{self.id}: {json.dumps(self.to_json(), indent=4)}"
+		
+	def add_item(self, item):
+		if type(item) == Item or issubclass(item.__class__, Item):
+			self._inventory.append(item.to_dict())
+			self.update_inventory()
+	
+	def remove_item(self, item):
+		if type(item) == Item or issubclass(item.__class__, Item):
+			for i, it in enumerate(self.inventory):
+				if it.data == item.data:
+					self._inventory.pop(i)
+					self.update()
+					break
+			return
+		self.inventory.pop(item)
+		self.update()
+		
+	def buy(self, item, itemstore=None):
+		if itemstore is None:
+			global IS
+			itemstore = IS
+		
+		i = itemstore.buy(item)
+		if self.gbp >= i.value:
+			self.give_gbp(-i.value)
+		else:
+			print("Insufficient Funds")
+			return
+		self.add_item(i)
+		self.update()
+		return i
+		
+	def update_inventory(self):
+		out = []
+		for item in self.inventory:
+			out.append(item.to_dict())
+		self._inventory = out
+		
+		
+	def update(self):
+		self.users.update_user(self)
+		
+	def give_gbp(self, amount):
+		self.gbp += amount
+		self.update()
+	
+		
+			
+			
 
+class UserStore(pdict):
+	def __init__(self, file, defaults={"users":{}}):
+		super().__init__(file, defaults, ctx=__file__)
+		
+	@property
+	def users(self):
+		if self["users"] is None:
+			self.users = {}
+		
+		out = {}
+		for id, user in self.data["users"].items():
+			out[id] = User(id, user["gbp"], user["inventory"], user["exp"]).to_json()
+		return out
+		
+	def update_user(self, user:User):
+		users = self.users
+		if str(user.id) in users.keys():
+			users[user.id] = user.to_json()
+		else:
+			raise ValueError("User doesnt exist")
+		self.users = users
+		self.save()
+		
+		
+	def add_user(self, user:User):
+		users = self.users
+		if str(user.id) in users.keys():
+			raise ValueError("User already exists")
+		users[user.id] = user.to_json()
+		self.users = users
+		self.save()
+		
+	def del_user(self, user:str):
+		user = str(user)
+		if user in self.users.keys():
+			self["users"].pop(user)
+		self.save()
+	
+	@users.setter
+	def users(self, value):
+		self.data["users"] = value
+		self.save()
+		
+	def get_user(self, id):
+		return User(str(id), data=self.users[str(id)], users=self)
+
+class ItemStore():
+	def __init__(self, *items):
+		self.items = items
+		
+	def buy(self, item:Item):
+		if type(item) == int:
+			return self.items[item]()
+		if type(item) == str:
+			for i in self.items:
+				if i().name == item:
+					return i()
+		
+		
+	
+	def __str__(self):
+		out = "Welcome to the shop! What would you like to buy?\n\n"
+		for i, item in enumerate(self.items):
+			
+			out += f"{i} : {item().name} - ¥{item().value}"
+		return out
+
+class sod(Item):
+	def __init__(self):
+		super().__init__({"Sword of Damacles":{"value":69}})
+		
+	def use(self, user):
+		user.give_gbp(99999)
+		super().use(user)
+		
+
+
+US = UserStore("./users/users.json")
+IS = ItemStore(sod)
 """
-u = CassUser(69)
-print(u)
-users = {0:u.to_json()}
-save(users)
+#y = User(0, 69, [], 420)
+#x.add_user(y)
+print(IS)
+#print(x.get_user(0).inventory)
+y = US.get_user(0)
+for i in y.inventory:
+	i.use(y)
+
+#y.give_gbp(69420)
+#y.buy("Sword of Damacles")
+#y.add_item()
+print(y)
+#interp(locals(), globals())
 """
-
-users = load()
-u = users["0"]
-
-
-print(users)
-shop = Shop()
-Sod = ItemTemplate(shop, "Sword of Damocles", 69420, use=Sod_use)
-
-print(shop)
-
-u.gbp = 999999
-print(u.gbp)
-#x = Sod.buy(u)
-#print(u.gbp)
-print("inventory:", u.inventory)
-y = shop.buy("Sword of Damocles", u)
-
-#print(y)
-print(u.gbp)
-print("inventory:", u.inventory)
-
-"""
-for item in u.inventory:
-	x = item.use(None, u)
-	print(x)
-	print("inventory:", u.inventory)
-"""
-#print(u.use("Sword of Damocles", None))
-
-save(users)
