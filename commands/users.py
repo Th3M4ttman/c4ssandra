@@ -159,7 +159,7 @@ class UserStore(pdict):
 	def get_user(self, id):
 		for i, user in self.users.items():
 			if str(i) == str(id):
-				return User(id, data=user.to_json()[str(id)])
+				return User(id, data=user.to_json())
 		print(id, "Not Found")
 		return None
 
