@@ -224,4 +224,6 @@ async def gbp(ctx:Context, action=None):
 		await ctx.message.channel.send(msg)
 		
 	
-		
+@cassandra.command(name="users")
+async def users(ctx):
+	await ctx.message.channel.send(str(US))
