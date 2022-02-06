@@ -134,14 +134,14 @@ class UserStore(pdict):
 		
 		
 	def add_user(self, user:User):
-		users = self.users
-		if str(user.id) in users.keys():
+		u = self.users
+		if str(user.id) in u.keys():
 			raise ValueError("User already exists")
-		if type(user) == int:
-			users[str(id)] = User(id).to_json()
+		if type(user) in (int, str):
+			u[str(id)] = User(id).to_json()
 		else:
-			users[str(user.id)] = user.to_json()
-		self.users = users
+			u[str(user.id)] = user.to_json()
+		self.users = u
 		self.save()
 		
 	def del_user(self, user:str):
