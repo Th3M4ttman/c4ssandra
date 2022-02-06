@@ -216,7 +216,7 @@ async def gbp(ctx:Context, action=None):
 	user = US.get_user(ctx.author.id)
 	await bs(ctx)
 	if user is None:
-		user = US.add_user(User(ctx.author))
+		user = US.add_user(User(int(ctx.author)))
 	
 	if action == None:
 		dn = cassandra.get_user(user.id).display_name
