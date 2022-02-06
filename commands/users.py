@@ -223,5 +223,5 @@ async def gbp(ctx:Context, action=None):
 		msg = f"Good Boy Points:\n\t{dn}: ¥{humanize.intcomma(user.gbp)}"
 		await ctx.message.channel.send(msg)
 		
-	.
+	
 		
