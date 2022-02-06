@@ -15,8 +15,8 @@ class pdict(dict):
 	def load(self, *args, **kwargs):
 		for k, i in self.defaults.items():
 				self.data[k]= i
-		if os.path.exists(self["file"]):
-			with open(self["file"]) as f:
+		if os.path.exists(self.path):
+			with open(self.path) as f:
 				data = json.loads("".join(f.readlines()))
 			for k, i in data.items():
 				self.data[k]= i
@@ -30,7 +30,7 @@ class pdict(dict):
 		
 	
 	def save(self):
-		with open(self["file"], "w") as f:
+		with open(self.path, "w") as f:
 			f.write(json.dumps(self.data, indent=4))
 	
 	@property
