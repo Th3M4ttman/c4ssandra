@@ -115,8 +115,8 @@ class UserStore(pdict):
 		
 	@property
 	def users(self):
-		if self["users"] is None:
-			self.users = {}
+		if self.data["users"] is None:
+			self.users = dict()
 		
 		out = {}
 		for id, user in self.data["users"].items():
@@ -156,10 +156,13 @@ class UserStore(pdict):
 		self.save()
 		
 	def get_user(self, id):
-		for user in self.users:
-			if str(id) == user.id:
-				return User(str(id), data=self.users[str(id)], users=self)
-			return None
+		try:
+			for i, user in self.data["users"].items():
+				if i == id:
+					return User(str(id), data=user, users=self)
+		except:
+			pass
+		return None
 
 class ItemStore():
 	def __init__(self, *items):
