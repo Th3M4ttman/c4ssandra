@@ -8,7 +8,8 @@ class pdict():
 	
 	def __init__(self, file, defaults = {}, ctx = __file__):
 		self.ctx = ctx
-		self.data = dict(file=file)
+		self.data = dict()
+		self.file = file
 		self.defaults = defaults
 		self.load()
 		
@@ -16,13 +17,13 @@ class pdict():
 	def load(self, *args, **kwargs):
 		for k, i in self.defaults.items():
 				self.data[k]= i
-		if os.path.exists(root+self.data["file"]):
-			with open(root+self.data["file"]) as f:
+		if os.path.exists(self.path):
+			with open(self.path) as f:
 				data = json.loads("".join(f.readlines()))
 			for k, i in data.items():
 				self.data[k]= i
 		else:
-			print(root+self.data["file"], "doesnt exist bitch")
+			print(self.path, "doesnt exist, creating...")
 			self.save()
 			return self.load()
 			
@@ -32,21 +33,12 @@ class pdict():
 		
 	
 	def save(self):
-		with open(self.data["file"], "w") as f:
+		with open(self.path, "w") as f:
 			f.write(json.dumps(self.data , indent=4))
 	
 	@property
 	def path(self):
-		
-		if self["file"].count(".") <= 1:
-			p = self["file"]
-			if p.count("/") == 0:
-				p = "/" + p
-		else:
-			p = ".".join(self["file"].split(".")[1:])
-		
-		#f len(self.ctx)
-		return "/".join(self.ctx.split("/")[:-1]) + p
+		return root + self.file
 		
 	
 	def __getitem__(self, key):
