@@ -47,11 +47,11 @@ class pdict(dict):
 		#f len(self.ctx)
 		return "/".join(self.ctx.split("/")[:-1]) + p
 		
-	"""
+	
 	def __getitem__(self, key):
 		if key not in super().__getattribute__("data").keys():
 			return self.__missing__(key)
-		return super().__getattribute__("data")[key]"""
+		return super().__getattribute__("data")[key]
 	
 	def __setitem__(self, key, value):
 		self.data[key] = value
