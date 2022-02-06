@@ -32,7 +32,7 @@ class pdict(dict):
 	
 	def save(self):
 		with open(self.data["file"], "w") as f:
-			f.write(json.dumps(super().__getattribute__("data"), indent=4))
+			f.write(json.dumps(self.data), indent=4)
 	
 	@property
 	def path(self):
@@ -70,7 +70,6 @@ class pdict(dict):
 		try:
 			x = super().__getattribute__(name)
 			super().__setattr__(name, value)
-			return super().__getattribute__(name)
 		except Exception as e:
 			#print(e)
 			self[name] = value
