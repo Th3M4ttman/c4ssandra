@@ -191,7 +191,7 @@ class sod(Item):
 
 
 
-US = UserStore(ROOT+"/users/users.json")
+US = UserStore("/users/users.json")
 IS = ItemStore(sod)
 """
 #y = User(0, 69, [], 420)
