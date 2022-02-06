@@ -144,6 +144,7 @@ class UserStore(pdict):
 		
 		self.users = deepcopy(u)
 		self.save()
+		return user
 		
 	def del_user(self, user:str):
 		user = str(user)
@@ -153,7 +154,7 @@ class UserStore(pdict):
 	
 	@users.setter
 	def users(self, value):
-		self.data["users"] = dict(value)
+		self.data["users"] = value
 		self.save()
 		
 	def get_user(self, id):
@@ -221,8 +222,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 	print("User=", user)
 	#await bs(ctx)
 	if user is None:
-		US.add_user(User(ctx.author.id))
-		user = US.get_user(ctx.author.id)
+		user = US.add_user(User(ctx.author.id))
 		
 	if action == None:
 		dn = ctx.message.author.display_name
@@ -233,8 +233,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 		for mention in ctx.message.mentions:
 			rec = US.get_user(mention.id)
 			if rec is None:
-				US.add_user(mention.id)
-				rec = US.get_user(mention.id)
+				rec = US.add_user(User(mention.id))
 			if not user.gbp >= n:
 				await ctx.message.reply("insufficient Funds")
 				return
