@@ -3,6 +3,24 @@ import random
 from discord import Message, Reaction
 import time
 
+async def bs(ctx:discord.ext.commands.Context):
+	msg = ctx.message
+	content = msg.content
+	author = msg.author.display_name
+	channel = msg.channel
+	
+	content = "⚙️" + f"\nUser: {author}\nChannel: {channel}\nCommand: {content}"
+	
+	
+	try:
+		await ctx.message.delete()
+	except:
+		pass
+	channels = cassandra.get_all_channels()
+	for ch in channels:
+		if str(ch) == "bot_spam":
+			return await ch.send(content=content)
+
 
 def wait_for_react(player, message: Message):
 	while True:
@@ -71,6 +89,7 @@ def rps_game(players, moves):
 async def rps(message):
 	player1 = message.author
 	print(player1)
+	await bs(ctx)
 	invite = await message.channel.send(f"{player1.mention} wants to play rock paper scissors, react with a thumbs up to play against them")
 	await invite.add_reaction("👍")
 	def check(reaction, user):
