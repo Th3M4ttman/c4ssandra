@@ -214,6 +214,7 @@ from discord.ext.commands import Context
 @cassandra.command(name="gbp")
 async def gbp(ctx:Context, action=None):
 	user = US.get_user(ctx.author.id)
+	print("User=", user)
 	await bs(ctx)
 	if user is None:
 		user = US.add_user(User(int(ctx.author.id)))
