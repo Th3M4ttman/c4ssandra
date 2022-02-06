@@ -227,8 +227,12 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 		dn = ctx.message.author.display_name
 		msg = f"Good Boy Points:\n\t{dn}: ¥{humanize.intcomma(user.gbp)}"
 		await ctx.message.channel.send(msg)
+	elif action == "*":
+		user.give_gbp(n)
+		await ctx.channel.send(ctx.author.display_name + " recieved ¥" + humanize.intcomma(n))
+		await ctx.message.delete()
 	
-	if action == "give":
+	elif action == "give":
 		for mention in ctx.message.mentions:
 			rec = US.get_user(mention.id)
 			if rec is None:
@@ -238,6 +242,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 				return
 			user.give_gbp(-n)
 			rec.give_gbp(n)
+			
 		await ctx.channel.send(ctx.author.display_name + " sent ¥" + n + " to " + ",".join([str(x) for x in ctx.message.mentions]))
 			
 			
@@ -246,3 +251,4 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 @cassandra.command(name="users")
 async def users(ctx):
 	await ctx.message.channel.send(str(US))
+	
