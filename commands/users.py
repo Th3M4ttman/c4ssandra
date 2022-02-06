@@ -2,6 +2,7 @@ from .pdict import pdict
 import json
 import  humanize
 from . import ROOT
+from copy import deepcopy
 
 class Item():
 	def __init__(self, data:dict, itemstore=None):
@@ -135,13 +136,13 @@ class UserStore(pdict):
 		
 	def add_user(self, user:User):
 		u = self.users
-		if str(user.id) in u.keys():
-			raise ValueError("User already exists")
-		if type(user) in (int, str):
+		if type(user) == User:
+			if str(user.id) in u.keys():
+				raise ValueError("User already exists")
+		elif type(user) in (int, str):
 			u[str(user)] = User(user).to_json()
-		else:
-			u[str(user.id)] = user.to_json()
-		self.users = u
+		
+		self.users = deepcopy(u)
 		self.save()
 		
 	def del_user(self, user:str):
