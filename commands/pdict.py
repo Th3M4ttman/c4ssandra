@@ -4,7 +4,7 @@ import json
 from copy import deepcopy
 root = "/".join(__file__.split("/")[0:-1])
 
-class pdict(dict):
+class pdict():
 	
 	def __init__(self, file, defaults = {}, ctx = __file__):
 		self.ctx = ctx
