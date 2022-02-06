@@ -1,4 +1,4 @@
-from pdict import pdict
+from .pdict import pdict
 import json
 import  humanize
 
