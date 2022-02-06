@@ -138,7 +138,7 @@ class UserStore(pdict):
 			if str(user.id) in u.keys():
 				raise ValueError("User already exists")
 		else:
-			if str(user) not in u.keys():
+			if str(user) in u.keys():
 				user = User(user, data=u[str(user)], users=self)
 			else:
 				raise ValueError("User already exists")
@@ -240,10 +240,10 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 	
 	elif action == "give":
 		for mention in ctx.message.mentions:
-			rec = US.get_user(str(mention.id))
+			rec = US.get_user(mention.id)
 			if rec is None:
 				print("Creating", mention.id)
-				rec = US.add_user(str(mention.id))
+				rec = US.add_user(User(mention.id))
 				
 			if not user.gbp >= n:
 				await ctx.message.reply("insufficient Funds")
