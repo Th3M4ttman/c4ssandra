@@ -246,9 +246,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 			rec.give_gbp(n)
 			
 		await ctx.channel.send(ctx.author.display_name + " sent ¥" + n + " to " + ",".join([str(x) for x in ctx.message.mentions]))
-			
-			
-		
+					
 	
 @cassandra.command(name="users")
 async def users(ctx):
