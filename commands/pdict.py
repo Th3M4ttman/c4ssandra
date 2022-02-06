@@ -31,7 +31,7 @@ class pdict(dict):
 		
 	
 	def save(self):
-		with open(self["file"], "w") as f:
+		with open(root+self.data["file"], "w") as f:
 			f.write(json.dumps(self.data, indent=4))
 	
 	@property
