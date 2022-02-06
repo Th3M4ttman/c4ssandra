@@ -2,6 +2,7 @@ from .bot import cassandra
 import random
 from discord import Message, Reaction
 import time
+import discord
 
 async def bs(ctx:discord.ext.commands.Context):
 	msg = ctx.message
