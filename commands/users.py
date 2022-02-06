@@ -157,9 +157,9 @@ class UserStore(pdict):
 		self.save()
 		
 	def get_user(self, id):
-		for i, user in self.data["users"].items():
-			if str(i) == str(id):
-				return User(str(id), data=user, users=self)
+		for user in self.users:
+			if str(user.id) == str(id):
+				return user
 		print(id, "Not Found")
 		return None
 
