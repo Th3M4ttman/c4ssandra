@@ -8,7 +8,7 @@ class pdict(dict):
 	
 	def __init__(self, file, defaults = {}, ctx = __file__):
 		super().__setattr__("ctx", ctx)
-		super().__setattr__("data", dict(file=file))
+		self.data = dict(file=file)
 		super().__setattr__("defaults", defaults)
 		self.load()
 		
@@ -68,12 +68,15 @@ class pdict(dict):
 	
 	def __setattr__(self, name, value):
 		try:
-			x = super().__getattribute__(name)
-			super().__setattr__(name, value)
+			if name in ("data", "ctx", "defaults"):
+				super().__setattr__(name, value)
+			else:
+				raise ValueError("Nah")
+			super().__getattribute__(name)
 		except Exception as e:
 			#print(e)
 			self[name] = value
-			return self.data[name]
+			
 			
 	def clear(self):
 		os.remove(self.path)
