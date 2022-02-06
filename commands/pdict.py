@@ -7,9 +7,9 @@ root = "/".join(__file__.split("/")[0:-1])
 class pdict(dict):
 	
 	def __init__(self, file, defaults = {}, ctx = __file__):
-		super().__setattr__("ctx", ctx)
+		self.ctx = ctx
 		self.data = dict(file=file)
-		super().__setattr__("defaults", defaults)
+		self.defaults = defaults
 		self.load()
 		
 		
@@ -47,23 +47,20 @@ class pdict(dict):
 		#f len(self.ctx)
 		return "/".join(self.ctx.split("/")[:-1]) + p
 		
-		
+	"""
 	def __getitem__(self, key):
 		if key not in super().__getattribute__("data").keys():
 			return self.__missing__(key)
-		return super().__getattribute__("data")[key]
+		return super().__getattribute__("data")[key]"""
 	
 	def __setitem__(self, key, value):
 		self.data[key] = value
 		self.save()
 		return self.data[key]
-		
+	
+	"""
 		
 	def __getattr__(self, name):
-		if name in self.__dict__.keys():
-			return self.__dict__[name]
-		if name in self.data.keys():
-			return self.data[name]
 		return super().__getattribute__(name)
 	
 	def __setattr__(self, name, value):
@@ -76,7 +73,7 @@ class pdict(dict):
 		except Exception as e:
 			#print(e)
 			self[name] = value
-			
+	"""
 			
 	def clear(self):
 		os.remove(self.path)
