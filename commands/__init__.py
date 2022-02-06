@@ -230,11 +230,11 @@ async def bs(ctx:discord.ext.commands.Context):
 	msg = ctx.message
 	content = msg.content
 	author = msg.author.display_name
+	channel = msg.channel
 	
-	content = "⚙️" + f"\nUser: {author}\nCommand: {content}"
+	content = "⚙️" + f"\nUser: {author}\nChannel: {channel}\nCommand: {content}"
 	
 	
-	channel = ctx.message.channel
 	try:
 		await ctx.message.delete()
 	except:
