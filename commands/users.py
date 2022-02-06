@@ -236,7 +236,7 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 	
 	elif action == "give":
 		for mention in ctx.message.mentions:
-			rec = US.get_user(mention.id)
+			rec = US.get_user(str(mention.id))
 			if rec is None:
 				print("Creating", mention.id)
 				rec = US.add_user(str(mention.id))
