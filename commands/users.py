@@ -140,7 +140,7 @@ class UserStore(pdict):
 			if str(user.id) in u.keys():
 				raise ValueError("User already exists")
 		elif type(user) in (int, str):
-			u[str(user)] = User(user).to_json()
+			u[str(user)] = User(str(user)).to_json()
 		
 		self.users = deepcopy(u)
 		self.save()
