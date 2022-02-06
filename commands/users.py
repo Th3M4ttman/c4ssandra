@@ -138,7 +138,7 @@ class UserStore(pdict):
 			if str(user.id) in u.keys():
 				raise ValueError("User already exists")
 		else:
-			if str(user) in u.keys():
+			if str(user) not in u.keys():
 				user = User(user, data=u[str(user)], users=self)
 			else:
 				raise ValueError("User already exists")
@@ -220,8 +220,8 @@ from discord.ext.commands import Context
 async def gbp(ctx:Context, action=None, n:int = 0):
 	try:
 		US.add_user(str(cassandra.user.id))
-	except:
-		pass
+	except Exception as e:
+		print(e)
 	user = US.get_user(ctx.author.id)
 	print("User=", user)
 	#await bs(ctx)
