@@ -130,7 +130,6 @@ class UserStore(pdict):
 		users = self.users
 		users[user.id] = user.to_json()
 		self.users = users
-		self.save()
 		
 		
 	def add_user(self, user:User):
@@ -140,7 +139,7 @@ class UserStore(pdict):
 				raise ValueError("User already exists")
 		else:
 			if str(user) in u.keys():
-				user = User(user, users=self)
+				user = User(user, data=u[str(user)], users=self)
 			else:
 				raise ValueError("User already exists")
 			
@@ -255,3 +254,8 @@ async def gbp(ctx:Context, action=None, n:int = 0):
 async def users(ctx):
 	await ctx.message.channel.send(str(US))
 	
+@cassandra.command(name="clearusers")
+async def clearusers(ctx):
+	await ctx.message.delete()
+	US.users = dict()
+	await ctx.channel.send("Cleared users")
