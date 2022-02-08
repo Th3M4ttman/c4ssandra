@@ -185,11 +185,11 @@ async def gbp(ctx):
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
 	await ctx.message.delete()
 
-from discord import Member
+from discord import User
 from .bot import has_role
 
 @cassandra.command(name="givegbp", help="Give someone gbp")
-async def givegbp(ctx, recipient:Member, n:int, remove=None):
+async def givegbp(ctx, recipient:User, n:int, remove=None):
 	if remove != None and has_role(ctx.message.author):
 		remove = False
 	else:
