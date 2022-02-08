@@ -12,7 +12,7 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
 
 def update(discord, gbp, exp, _inventory):
 	""" update vendor name based on the vendor id """
-	inventory = '{"inventory":!}'.replace("!", _inventory)
+	inventory = _inventory
 	sql = f"""UPDATE accounts
 SET GBP = {gbp},
     EXP = {exp},
@@ -126,7 +126,7 @@ class CUser():
 	def refresh(self):
 		try:
 			self.id, _, self.exp, self.gbp, self.inventory = get_user(self.discord)
-			self.inventory = self.inventory["inventory"]
+			self.inventory = json.loads(self.inventory)
 		except Exception as e:
 			print(e)
 			self.exists = False
@@ -145,9 +145,8 @@ class CUser():
 		return self.refresh()
 		
 	def add_item(self, item):
-		inventory = self.inventory
-		inventory.append(item.to_json())
-		return self.update(inventory=inventory)
+		self.inventory["inventory"].append(item.to_json())
+		return self.update(inventory=self.inventory)
 		
 		
 		
