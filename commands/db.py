@@ -93,7 +93,7 @@ def get_user(discord, create=True):
 		except:
 			user = None
 		
-		if user is None and create:
+		if user == None and create:
 			user = add_user(discord, 0, 0, [None])
 			print("added user", user[0], ":", discord)
 			if conn is not None:
