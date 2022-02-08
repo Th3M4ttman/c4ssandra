@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import humanize
 
 PASS = os.environ['PASS']
 
@@ -105,17 +106,19 @@ def get_user(discord, create=True):
 from .bot import cassandra
 
 class CUser():
-	def __init__(self, id, discord, gbp, exp, inventory):
-		self.id = id
+	def __init__(self, discord):
+		self.id = 0
 		self.discord = discord
-		self.gbp = gbp
-		self.exp = exp
-		self.inventory = inventory
+		self.gbp = 0
+		self.exp = 0
+		self.inventory = {}
+		self.refresh()
 	
 	def refresh(self):
-		self.id, self.discord, self.gbp, self.exp = update(self.discord, self.gbp, self.exp,  self.inventory)
+		self.id, _, self.gbp, self.exp, self.inventory = get_user(self.discord)
 
 def ensure_table():
+	count = 0
 	try:
 			sql = """CREATE TABLE IF NOT EXISTS accounts (
 	ID serial PRIMARY KEY,
@@ -124,7 +127,9 @@ def ensure_table():
 	EXP bigint NOT NULL,
 	GBP bigint NOT NULL,
 	INVENTORY json NOT NULL
-	);"""
+	);
+INSERT INTO accounts(ID, DISCORD, GBP, EXP, INVENTORY)
+VALUES (0, 940014399719108638, 69420, 9001, '{"inventory":[]}');"""
 			# connect to the PostgreSQL database
 			conn = psycopg2.connect(**CFG)
 			# create a new cursor
@@ -133,6 +138,8 @@ def ensure_table():
 			cur.execute(sql)
 			# Commit the changes to the database
 			conn.commit()
+			
+			count = cur.rowcount
 			# Close communication with the PostgreSQL database
 			cur.close()
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -140,9 +147,23 @@ def ensure_table():
 	finally:
 		if conn is not None:
 			conn.close()
+		return count
 			
 			
-ensure_table()
+entries = ensure_table()
+print("Database Loaded", humanize.intcomma(entries), "entries present")
+
+@cassandra.command(name="gbp", help="Get your gbp total")
+async def gbp(ctx):
+	uid = ctx.message.author.id
+	u = CUser(uid)
+	if u is None:
+		await ctx.message.channel.send("Fuck")
+		await ctx.message.delete()
+	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
+	await ctx.message.delete()
+	
+
 if __name__ == '__main__':
 	#print(CFG)
 	try:
