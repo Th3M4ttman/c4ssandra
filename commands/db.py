@@ -9,11 +9,12 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
     "user":"lptycphsmjryri",
     "password":PASS}
 
-def update(discord, gbp, _inventory):
+def update(discord, gbp, exp, _inventory):
 	""" update vendor name based on the vendor id """
 	inventory = '{"inventory":!}'.replace("!", str(_inventory))
 	sql = f"""UPDATE accounts
 SET GBP = {gbp},
+    EXP = {exp},
 	INVENTORY = '{inventory}'
 WHERE DISCORD = {discord};"""
 	
@@ -44,12 +45,12 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(id, discord, gbp=0, _inventory=[]):
+def add_user(id, discord, gbp=0, exp=0, _inventory=[]):
 	print("Adding", id)
 	inventory = """'{"inventory":!}'""".replace("!", str(_inventory))
-	sql = """INSERT INTO accounts(ID, DISCORD, GBP, INVENTORY)
-VALUES ({id}, {discord}, {gbp}, {inventory});"""
-	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory)
+	sql = """INSERT INTO accounts(ID, DISCORD, GBP, EXP, INVENTORY)
+VALUES ({id}, {discord}, {gbp}, {exp} {inventory});"""
+	sql = sql.format(id=id, discord=discord, gbp=gbp, exp=exp, inventory = inventory)
 	
 	conn = None
 	
@@ -98,16 +99,56 @@ def get_user(discord, create=True):
 			conn.close()
 			
 	if user is None and create:
-		user = add_user(1, discord, 0, [])
+		user = add_user(1, discord, 0, 0, [])
 	return user
-	
 
+from .bot import cassandra
+
+class CUser():
+	def __init__(self, id, discord, gbp, exp, inventory):
+		self.id = id
+		self.discord = discord
+		self.gbp = gbp
+		self.exp = exp
+		self.inventory = inventory
+	
+	def refresh(self):
+		self.id, self.discord, self.gbp, self.exp = update(self.discord, self.gbp, self.exp,  self.inventory)
+
+def ensure_table():
+	try:
+			sql = """CREATE TABLE [IF NOT EXISTS] accounts (
+	ID serial PRIMARY KEY,
+	DISCORD bigint NOT NULL,
+	
+	EXP bigint NOT NULL,
+	GBP bigint NOT NULL,
+	INVENTORY json NOT NULL
+	);"""
+			# connect to the PostgreSQL database
+			conn = psycopg2.connect(**CFG)
+			# create a new cursor
+			cur = conn.cursor()
+			# execute the UPDATE  statement
+			cur.execute(sql)
+			# Commit the changes to the database
+			conn.commit()
+			# Close communication with the PostgreSQL database
+			cur.close()
+	except (Exception, psycopg2.DatabaseError) as error:
+		print(error)
+	finally:
+		if conn is not None:
+			conn.close()
+			
+			
+ensure_table()
 if __name__ == '__main__':
 	#print(CFG)
 	try:
 		print("get user:", get_user(940014428752072765))
-		print("add user:", add_user(69420, 940014456207966232, 69420, []))
-		print("update user:", update(940014428752072765, 69420, [6,7,8]))
+		print("add user:", add_user(69420, 940014456207966232, 69420, 0, []))
+		print("update user:", update(940014428752072765, 69420, 0, [6,7,8]))
 	except:
 		pass
 		

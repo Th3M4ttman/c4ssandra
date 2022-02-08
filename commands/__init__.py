@@ -1,10 +1,11 @@
 from asyncio import sleep
-from .bot import cassandra, has_role, ROOT
+from .bot import cassandra, has_role, ROOT, bs
 import random
 from discord import Message, Reaction
 import time
 from . import rockpaperscissors
-from . import users
+from . import db
+
 import datetime
 
 
