@@ -137,9 +137,7 @@ def ensure_table():
 	EXP bigint NOT NULL,
 	GBP bigint NOT NULL,
 	INVENTORY json NOT NULL
-	);
-INSERT INTO accounts(ID, DISCORD, GBP, EXP, INVENTORY)
-VALUES (0, 940014399719108638, 69420, 9001, '{"inventory":[]}');"""
+	);"""
 			# connect to the PostgreSQL database
 			conn = psycopg2.connect(**CFG)
 			# create a new cursor
@@ -148,8 +146,15 @@ VALUES (0, 940014399719108638, 69420, 9001, '{"inventory":[]}');"""
 			cur.execute(sql)
 			# Commit the changes to the database
 			conn.commit()
-			
+			cur.execute('select * from "public"."accounts";')
 			count = cur.rowcount
+			if count == 0:
+				cur.execute("""INSERT INTO accounts(ID, DISCORD, GBP, EXP, INVENTORY)
+VALUES (0, 940014399719108638, 69420, 9001, '{"inventory":[]}');
+""")
+				conn.commit()
+				cur.execute('select * from "public"."accounts";')
+				count = cur.rowcount
 			# Close communication with the PostgreSQL database
 			cur.close()
 	except (Exception, psycopg2.DatabaseError) as error:
@@ -170,6 +175,7 @@ async def gbp(ctx):
 	if not u.exists:
 		await ctx.message.channel.send("Fuck")
 		await ctx.message.delete()
+		return
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
 	await ctx.message.delete()
 	
