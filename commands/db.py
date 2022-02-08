@@ -184,7 +184,45 @@ async def gbp(ctx):
 		return
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
 	await ctx.message.delete()
+
+from discord import Member
+from .bot import has_role
+
+@cassandra.command(name="givegbp", help="Give someone gbp")
+async def givegbp(ctx, recipient:Member, n:int, remove=None):
+	if remove != None and has_role(ctx.message.author):
+		remove = False
+	else:
+		remove = True
+		
+	uid = ctx.message.author.id
+	u = CUser(uid)
+	if not u.exists:
+		await ctx.message.channel.send("No such user")
+		await ctx.message.delete()
+		return
+		
+	if n <= 0 and remove:
+		await ctx.message.channel.send(f"Value must be > ¥0")
+		await ctx.message.delete()
+		return 
+		
+	if u.gbp < n and remove:
+		await ctx.message.channel.send(f"Insufficient Funds {u.gbp}")
+		await ctx.message.delete()
+		return 
 	
+	r = CUser(recipient.id)
+	if not r.exists:
+		await ctx.message.channel.send(f"No such user {recipient.id}")
+		await ctx.message.delete()
+		return
+	
+	update(u.discord, (u.gbp-n) if remove else u.gbp, u.exp, u.inventory)
+	update(r.discord, r.gbp+n, r.exp, r.inventory)
+	
+	await ctx.message.channel.send(f"{ctx.message.author.display_name} gave {recipient.display_name} ¥{humanize.intcomma(n)}")
+	await ctx.message.delete()
 
 if __name__ == '__main__':
 	#print(CFG)
