@@ -143,7 +143,7 @@ class CUser():
 		if inventory is None:
 			inventory = self.inventory
 			
-		update(self.id, gbp, exp, inventory)
+		update(self.discord, gbp, exp, inventory)
 		return self.refresh()
 		
 	def add_item(self, item):
