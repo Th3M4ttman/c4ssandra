@@ -147,7 +147,8 @@ class CUser():
 		return self.refresh()
 		
 	def add_item(self, item):
-		self.inventory["inventory"].append(item.to_json())
+		inv = self.inventory
+		inv["inventory"].append(item.to_json())
 		return self.update(inventory=self.inventory)
 		
 		
@@ -227,7 +228,11 @@ async def testitem(ctx):
 	u = CUser(ctx.message.author.id)
 	u.add_item(Item("testitem", value = 600))
 	await ctx.message.channel.send("Gave testitem")
-	
+
+@cassandra.command(name="inv")
+async def inv(ctx):
+	u = CUser(ctx.message.author.id)
+	await ctx.message.channel.send(f"Inventory: {u.inventory}")
 	
 	
 @cassandra.command(name="givegbp", help="Give someone gbp")
