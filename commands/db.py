@@ -39,7 +39,7 @@ WHERE DISCORD = {discord};"""
 		if conn is not None:
 			conn.close()
 			
-	print(sql)
+	#print(sql)
 	user = get_user(discord)
 	return user
 
@@ -48,7 +48,7 @@ def add_user(id, discord, gbp=0, inventory=[]):
 	print("Adding", id)
 	inventory = """'{"inventory":!}'""".replace("!", str(inventory))
 	sql = """INSERT INTO accounts(ID, DISCORD, GBP, INVENTORY)
-VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
+VALUES ({id}, {discord}, {gbp}, {inventory});"""
 	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory)
 	
 	conn = None
@@ -71,7 +71,7 @@ VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
 		if conn is not None:
 			conn.close()
 	
-	print(sql)
+	#print(sql)
 	return get_user(discord)
 	
 def get_user(discord, create=True):
@@ -103,11 +103,11 @@ def get_user(discord, create=True):
 	
 
 if __name__ == '__main__':
-	print(CFG)
+	#print(CFG)
 	try:
-		print(get_user(940014428752072765))
-		print(add_user(0, 69, 420, {"inventory":[1,2,3]}))
-		print(update(940014428752072765, 99, [4,5,6]))
+		print("get user:", get_user(940014428752072765))
+		print("add user:", add_user(0, 69, 420, {"inventory":[1,2,3]}))
+		print("update user:", update(940014428752072765, 99, [4,5,6]))
 	except:
 		pass
 		
