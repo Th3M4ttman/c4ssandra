@@ -168,7 +168,7 @@ class Item():
 			self.data["value"] = 0
 			
 	def to_json(self):
-		return json.dumps(self.data)
+		return self.data
 		
 	@property
 	def value(self):
