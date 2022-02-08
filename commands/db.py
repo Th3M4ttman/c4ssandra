@@ -132,6 +132,38 @@ class CUser():
 			self.exists = False
 		print("user:", self.id, "¥", self.gbp)
 		return self
+	
+	def update(self, gbp=None, exp=None, inventory=None):
+		if gbp is None:
+			gbp = self.gbp
+		if exp is None:
+			exp = self.exp
+		if inventory is None:
+			inventory = self.inventory
+			
+		update(self.id, gbp, exp, inventory)
+		return self.refresh()
+		
+	def add_item(self, item):
+		inventory = self.inventory
+		inventory.append(item.to_json())
+		return self.update(inventory=inventory)
+		
+		
+		
+import json		
+class Item():
+	def __init__(self, name, **kwargs):
+		self.name = name
+		self.data = {}
+		self.data["name"] = name
+		for k, i in kwargs.items():
+			self.data[k] = i
+		
+	
+	def to_json(self):
+		return json.dumps(self.data)
+		
 		
 
 def ensure_table():
@@ -189,9 +221,17 @@ async def gbp(ctx):
 from discord import User
 from .bot import has_role
 
+@cassandra.command(name="testitem")
+async def testitem(ctx):
+	u = CUser(ctx.message.author.id)
+	u.add_item(Item("testitem", value = 600))
+	await ctx.message.channel.send("Gave testitem")
+	
+	
+	
 @cassandra.command(name="givegbp", help="Give someone gbp")
 async def givegbp(ctx, recipient:User, n:int, remove=None):
-	if remove != None:
+	if remove != None and await has_role(ctx.message.author, ctx.guild, "Admin", ctx.message):
 		remove = False
 	else:
 		remove = True
