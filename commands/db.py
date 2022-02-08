@@ -191,7 +191,7 @@ from .bot import has_role
 
 @cassandra.command(name="givegbp", help="Give someone gbp")
 async def givegbp(ctx, recipient:User, n:int, remove=None):
-	if remove != None and has_role(ctx.message.author):
+	if remove != None and await has_role(ctx.message.author):
 		remove = False
 	else:
 		remove = True
