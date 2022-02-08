@@ -106,7 +106,7 @@ if __name__ == '__main__':
 	#print(CFG)
 	try:
 		print("get user:", get_user(940014428752072765))
-		print("add user:", add_user(0, 69, 420, [1, 2,3]))
+		print("add user:", add_user(1, 940014456207966232, 69420, []))
 		print("update user:", update(940014428752072765, 69420, [6,7,8]))
 	except:
 		pass
