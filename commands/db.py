@@ -88,7 +88,13 @@ def get_user(discord, create=True):
 		cur = conn.cursor()
 		# execute the UPDATE  statement
 		cur.execute(sql)
-		user = cur.fetchone()
+		user = cur.fetchone()[0]
+		
+		if user is None and create:
+			cur.execute('SELECT LASTVAL()')
+			lastid = cur.fetchone()['lastval']
+			user = add_user(lastid+1, discord, 0, 0, [])
+			print("added user", lastid+1, ":", discord)
 		# Commit the changes to the database
 		conn.commit()
 		# Close communication with the PostgreSQL database
@@ -98,9 +104,7 @@ def get_user(discord, create=True):
 	finally:
 		if conn is not None:
 			conn.close()
-			
-	if user is None and create:
-		user = add_user(1, discord, 0, 0, [])
+	
 	return user
 
 from .bot import cassandra
@@ -112,10 +116,16 @@ class CUser():
 		self.gbp = 0
 		self.exp = 0
 		self.inventory = {}
+		self.exists = True
 		self.refresh()
 	
 	def refresh(self):
-		self.id, _, self.gbp, self.exp, self.inventory = get_user(self.discord)
+		try:
+			self.id, _, self.gbp, self.exp, self.inventory = get_user(self.discord)
+		except Exception as e:
+			print(e)
+			self.exists = False
+		
 
 def ensure_table():
 	count = 0
@@ -157,7 +167,7 @@ print("Database Loaded", humanize.intcomma(entries), "entries present")
 async def gbp(ctx):
 	uid = ctx.message.author.id
 	u = CUser(uid)
-	if u is None:
+	if not u.exists:
 		await ctx.message.channel.send("Fuck")
 		await ctx.message.delete()
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
