@@ -234,12 +234,6 @@ async def gbp(ctx):
 from discord import User
 from .bot import has_role
 
-@cassandra.command(name="testitem")
-async def testitem(ctx):
-	u = CUser(ctx.message.author.id)
-	u.add_item(Item("testitem", value = 600))
-	await ctx.message.channel.send("Gave testitem")
-
 @cassandra.command(name="inv")
 async def inv(ctx):
 	u = CUser(ctx.message.author.id)
@@ -248,6 +242,13 @@ async def inv(ctx):
 		inv[i] = "\n\t" + str(Item(**json.loads(item)))
 		
 	await ctx.message.channel.send(f"Inventory: {','.join(inv)}")
+	
+@cassandra.command(name="testitem")
+async def testitem(ctx):
+	u = CUser(ctx.message.author.id)
+	u.add_item(Item("testitem", value = 600))
+	await ctx.message.channel.send("Gave testitem")
+	await inv(ctx)
 	
 	
 @cassandra.command(name="givegbp", help="Give someone gbp")
