@@ -50,7 +50,7 @@ def add_user(discord, gbp=0, exp=0, _inventory=[None]):
 	print("Adding", discord)
 	inventory = """{"inventory":"!"}""".replace("!", str(_inventory))
 	sql = """INSERT INTO accounts(DISCORD, GBP, EXP, INVENTORY)
-VALUES ({discord}, {gbp}, {exp} {inventory});"""
+VALUES ({discord}, {gbp}, {exp} '{inventory}'');"""
 	sql = sql.format(discord=discord, gbp=gbp, exp=exp, inventory = inventory)
 	
 	conn = None
@@ -140,7 +140,7 @@ def ensure_table():
 	
 	EXP bigint NOT NULL,
 	GBP bigint NOT NULL,
-	INVENTORY json NOT NULL
+	INVENTORY jsonb
 	);"""
 			# connect to the PostgreSQL database
 			conn = psycopg2.connect(**CFG)
