@@ -46,9 +46,9 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(discord, gbp=0, exp=0, _inventory=[]):
+def add_user(discord, gbp=0, exp=0, _inventory=[None]):
 	print("Adding", discord)
-	inventory = """'{"inventory":!}'""".replace("!", str(_inventory))
+	inventory = """'{"inventory":!}'""".replace("!", _inventory)
 	sql = """INSERT INTO accounts(DISCORD, GBP, EXP, INVENTORY)
 VALUES ({discord}, {gbp}, {exp} {inventory});"""
 	sql = sql.format(discord=discord, gbp=gbp, exp=exp, inventory = inventory)
@@ -94,7 +94,7 @@ def get_user(discord, create=True):
 			user = None
 		
 		if user is None and create:
-			user = add_user(discord, 0, 0, [])
+			user = add_user(discord, 0, 0, [None])
 			print("added user", user[0], ":", discord)
 			if conn is not None:
 				conn.close()
@@ -119,7 +119,7 @@ class CUser():
 		self.discord = discord
 		self.gbp = 0
 		self.exp = 0
-		self.inventory = {}
+		self.inventory = {None}
 		self.exists = True
 		self.refresh()
 	
