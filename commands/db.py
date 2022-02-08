@@ -1,6 +1,7 @@
 import psycopg2
 import os
 import humanize
+from .items import *
 
 PASS = os.environ['PASS']
 
@@ -170,6 +171,9 @@ class Item():
 	def to_json(self):
 		return self.data
 		
+	def __call__(self):
+		return items.construct(self.to_json())
+		
 	@property
 	def value(self):
 		return self.data["value"]
@@ -242,6 +246,41 @@ async def inv(ctx):
 		inv[i] = "\n\t" + str(Item(**item))
 		
 	await ctx.message.channel.send(f"Inventory: {','.join(inv)}")
+
+@cassandra.command(name="use")
+async def use(ctx, *item):
+	if type(item) != str:
+		item = " ".join(item)
+		
+	
+	u = CUser(ctx.message.author.id)
+	inv = u.inventory["inventory"]
+	if item.isnumeric():
+		item = inv[int(item)]
+	else:
+		its = []
+		for i, it in enumerate(inv):
+			try:
+				if it["name"].strip().lower() == item.lower():
+					its.append(items.construct(it))
+			except:
+				pass
+		if len(its) == 0:
+			await ctx.message.channel.send(f"{item} not in inventory")
+			await ctx.message.delete()
+			return
+		if len(its) > 1:
+			msg = "Which one:"
+			for i, it in enumerate(its):
+				msg += f"{i}: {it.data}"
+			await ctx.message.reply(msg)
+			return
+		
+		item = its[0]
+		
+	msg = item.use()
+	await ctx.message.channel.send(str(msg))
+
 	
 @cassandra.command(name="testitem")
 async def testitem(ctx):
@@ -286,6 +325,10 @@ async def givegbp(ctx, recipient:User, n:int, remove=None):
 	
 	await ctx.message.channel.send(f"{ctx.message.author.display_name} gave {recipient.display_name} ¥{humanize.intcomma(n)}")
 	await ctx.message.delete()
+	
+from .items import items
+
+
 
 if __name__ == '__main__':
 	#print(CFG)
