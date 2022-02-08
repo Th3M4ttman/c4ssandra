@@ -51,7 +51,6 @@ VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
 	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory)
 	
 	conn = None
-	updated_rows = []
 	
 	try:
 		# connect to the PostgreSQL database
@@ -61,7 +60,6 @@ VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
 		# execute the UPDATE  statement
 		cur.execute(sql)
 		# get the number of updated rows
-		updated_rows = cur.rows
 		# Commit the changes to the database
 		conn.commit()
 		# Close communication with the PostgreSQL database
