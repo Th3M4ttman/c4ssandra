@@ -88,9 +88,13 @@ def get_user(discord, create=True):
 		cur = conn.cursor()
 		# execute the UPDATE  statement
 		cur.execute(sql)
-		user = cur.fetchone()[0]
+		try:
+			user = cur.fetchone()[0]
+		except:
+			user = None
 		
 		if user is None and create:
+			
 			cur.execute('SELECT LASTVAL()')
 			lastid = cur.fetchone()['lastval']
 			user = add_user(lastid+1, discord, 0, 0, [])
