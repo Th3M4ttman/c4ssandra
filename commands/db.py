@@ -12,7 +12,7 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
 
 def update(discord, gbp, exp, _inventory):
 	""" update vendor name based on the vendor id """
-	inventory = _inventory.replace("'", '"')
+	inventory = json.dumps(_inventory)
 	print("inventory =", inventory)
 	
 	sql = f"""UPDATE accounts
