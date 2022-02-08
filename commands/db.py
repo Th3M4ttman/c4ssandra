@@ -44,8 +44,9 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(id, discord, gbp=0, inventory={"inventory":[]}):
+def add_user(id, discord, gbp=0, inventory=[]):
 	print("Adding", id)
+	inventory = """'{"inventory":!}'""".replace("!", str(inventory))
 	sql = """INSERT INTO accounts(ID, DISCORD, GBP, INVENTORY)
 VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
 	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory)
