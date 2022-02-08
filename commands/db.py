@@ -126,6 +126,7 @@ class CUser():
 	def refresh(self):
 		try:
 			self.id, _, self.exp, self.gbp, self.inventory = get_user(self.discord)
+			self.inventory = self.inventory["inventory"]
 		except Exception as e:
 			print(e)
 			self.exists = False
