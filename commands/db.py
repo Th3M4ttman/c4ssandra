@@ -1,7 +1,8 @@
 import psycopg2
 import os
 import humanize
-from .items import *
+from .items import construct
+from .items import items as _items
 
 PASS = os.environ['PASS']
 
@@ -172,7 +173,7 @@ class Item():
 		return self.data
 		
 	def __call__(self):
-		return items.construct(self.to_json())
+		return construct(self.to_json())
 		
 	@property
 	def value(self):
@@ -262,7 +263,7 @@ async def use(ctx, *item):
 		for i, it in enumerate(inv):
 			try:
 				if it["name"].strip().lower() == item.lower():
-					its.append(items.construct(it))
+					its.append(construct(it))
 			except:
 				pass
 		if len(its) == 0:
@@ -326,7 +327,7 @@ async def givegbp(ctx, recipient:User, n:int, remove=None):
 	await ctx.message.channel.send(f"{ctx.message.author.display_name} gave {recipient.display_name} ¥{humanize.intcomma(n)}")
 	await ctx.message.delete()
 	
-from .items import items
+
 
 
 
