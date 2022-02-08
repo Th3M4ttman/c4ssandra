@@ -155,16 +155,27 @@ class CUser():
 		
 import json		
 class Item():
-	def __init__(self, name, **kwargs):
+	def __init__(self, name = "item", **kwargs):
 		self.name = name
 		self.data = {}
-		self.data["name"] = name
 		for k, i in kwargs.items():
 			self.data[k] = i
-		
-	
+			if k == "name":
+				self.name = i
+		if "name" not in kwargs.keys():
+			self.data["name"] = self.name
+		if "value" not in kwargs.keys():
+			self.data["value"] = 0
+			
 	def to_json(self):
 		return json.dumps(self.data)
+		
+	@property
+	def value(self):
+		return self.data["value"]
+		
+	def __str__(self):
+		return f"{self.name} - ¥{humanize.intcomma(self.value)}"
 		
 		
 
@@ -232,7 +243,11 @@ async def testitem(ctx):
 @cassandra.command(name="inv")
 async def inv(ctx):
 	u = CUser(ctx.message.author.id)
-	await ctx.message.channel.send(f"Inventory: {u.inventory}")
+	inv = u.inventory["inventory"]
+	for i, item in enumerate(inv):
+		inv[i] = str(Item(**json.loads(item)))
+		
+	await ctx.message.channel.send(f"Inventory: {','.join(inv)}")
 	
 	
 @cassandra.command(name="givegbp", help="Give someone gbp")
