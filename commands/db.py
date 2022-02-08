@@ -46,7 +46,7 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(discord, gbp=0, exp=0, _inventory=[None]):
+def add_user(discord, gbp=0, exp=0, _inventory=[]):
 	print("Adding", discord)
 	inventory = """{"inventory":!}""".replace("!", str(_inventory))
 	sql = """INSERT INTO accounts(DISCORD, GBP, EXP, INVENTORY)
@@ -119,7 +119,7 @@ class CUser():
 		self.discord = discord
 		self.exp = 0
 		self.gbp = 0
-		self.inventory = {None}
+		self.inventory = []
 		self.exists = True
 		self.refresh()
 	
