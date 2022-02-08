@@ -257,7 +257,7 @@ async def use(ctx, *item):
 	u = CUser(ctx.message.author.id)
 	inv = u.inventory["inventory"]
 	if item.isnumeric():
-		item = inv[int(item)]
+		item = construct(inv[int(item)])
 	else:
 		its = []
 		for i, it in enumerate(inv):
