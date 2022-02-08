@@ -239,7 +239,7 @@ async def inv(ctx):
 	u = CUser(ctx.message.author.id)
 	inv = u.inventory["inventory"]
 	for i, item in enumerate(inv):
-		inv[i] = "\n\t" + str(Item(**json.loads(item)))
+		inv[i] = "\n\t" + str(Item(**item))
 		
 	await ctx.message.channel.send(f"Inventory: {','.join(inv)}")
 	
