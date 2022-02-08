@@ -27,7 +27,7 @@ WHERE DISCORD = {discord};"""
 		# read database configuration
 		params = {}
 		# connect to the PostgreSQL database
-		conn = psycopg2.connect(**CFG)
+		conn = psycopg2.connect(kwargs=CFG)
 		# create a new cursor
 		cur = conn.cursor()
 		# execute the UPDATE  statement
@@ -52,14 +52,14 @@ def add_user(id, discord, gbp=0, inventory={"inventory":[]}):
 	print("Adding", id)
 	sql = """INSERT INTO accounts(ID, DISCORD, GBP, INVENTORY)
 VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
-	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory )
+	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory)
 	
 	conn = None
 	updated_rows = []
 	
 	try:
 		# connect to the PostgreSQL database
-		conn = psycopg2.connect(**CFG)
+		conn = psycopg2.connect(kwargs=CFG)
 		# create a new cursor
 		cur = conn.cursor()
 		# execute the UPDATE  statement
@@ -86,7 +86,7 @@ def get_user(discord, create=True):
 	
 	try:
 		# connect to the PostgreSQL database
-		conn = psycopg2.connect(**CFG)
+		conn = psycopg2.connect(kwargs=CFG)
 		# create a new cursor
 		cur = conn.cursor()
 		# execute the UPDATE  statement
@@ -108,7 +108,12 @@ def get_user(discord, create=True):
 	
 
 if __name__ == '__main__':
-	print(get_user(940014428752072765))
-	print(add_user(0, 69, 420, {"inventory":[1,2,3]}))
-	print(update(940014428752072765, 99, [4,5,6]))
+	print(CFG)
+	try:
+		print(get_user(940014428752072765))
+		print(add_user(0, 69, 420, {"inventory":[1,2,3]}))
+		print(update(940014428752072765, 99, [4,5,6]))
+	except:
+		pass
+		
 
