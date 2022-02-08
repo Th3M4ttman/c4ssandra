@@ -27,7 +27,7 @@ WHERE DISCORD = {discord};"""
 		# read database configuration
 		params = {}
 		# connect to the PostgreSQL database
-		conn = psycopg2.connect(kwargs=CFG)
+		conn = psycopg2.connect(**CFG)
 		# create a new cursor
 		cur = conn.cursor()
 		# execute the UPDATE  statement
@@ -59,7 +59,7 @@ VALUES ({id}, {discord}, {gbp}, '{inventory}');"""
 	
 	try:
 		# connect to the PostgreSQL database
-		conn = psycopg2.connect(kwargs=CFG)
+		conn = psycopg2.connect(**CFG)
 		# create a new cursor
 		cur = conn.cursor()
 		# execute the UPDATE  statement
@@ -86,7 +86,7 @@ def get_user(discord, create=True):
 	
 	try:
 		# connect to the PostgreSQL database
-		conn = psycopg2.connect(kwargs=CFG)
+		conn = psycopg2.connect(**CFG)
 		# create a new cursor
 		cur = conn.cursor()
 		# execute the UPDATE  statement
