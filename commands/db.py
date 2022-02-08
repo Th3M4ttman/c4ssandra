@@ -117,18 +117,20 @@ class CUser():
 	def __init__(self, discord):
 		self.id = 0
 		self.discord = discord
-		self.gbp = 0
 		self.exp = 0
+		self.gbp = 0
 		self.inventory = {None}
 		self.exists = True
 		self.refresh()
 	
 	def refresh(self):
 		try:
-			self.id, _, self.gbp, self.exp, self.inventory = get_user(self.discord)
+			self.id, _, self.exp, self.gbp, self.inventory = get_user(self.discord)
 		except Exception as e:
 			print(e)
 			self.exists = False
+		print("user:", self.id, "¥", self.gbp)
+		return self
 		
 
 def ensure_table():
@@ -177,7 +179,7 @@ async def gbp(ctx):
 	uid = ctx.message.author.id
 	u = CUser(uid)
 	if not u.exists:
-		await ctx.message.channel.send("Fuck")
+		await ctx.message.channel.send("No such user")
 		await ctx.message.delete()
 		return
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
