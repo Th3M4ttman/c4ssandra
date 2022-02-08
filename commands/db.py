@@ -117,7 +117,7 @@ class CUser():
 
 def ensure_table():
 	try:
-			sql = """CREATE TABLE [IF NOT EXISTS] accounts (
+			sql = """CREATE TABLE IF NOT EXISTS accounts (
 	ID serial PRIMARY KEY,
 	DISCORD bigint NOT NULL,
 	
