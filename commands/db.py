@@ -9,9 +9,9 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
     "user":"lptycphsmjryri",
     "password":PASS}
 
-def update(discord, gbp, inventory):
+def update(discord, gbp, _inventory):
 	""" update vendor name based on the vendor id """
-	inventory = '{"inventory":!}'.replace("!", str(inventory))
+	inventory = '{"inventory":!}'.replace("!", str(_inventory))
 	sql = f"""UPDATE accounts
 SET GBP = {gbp},
 	INVENTORY = '{inventory}'
@@ -44,9 +44,9 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(id, discord, gbp=0, inventory=[]):
+def add_user(id, discord, gbp=0, _inventory=[]):
 	print("Adding", id)
-	inventory = """'{"inventory":!}'""".replace("!", str(inventory))
+	inventory = """'{"inventory":!}'""".replace("!", str(_inventory))
 	sql = """INSERT INTO accounts(ID, DISCORD, GBP, INVENTORY)
 VALUES ({id}, {discord}, {gbp}, {inventory});"""
 	sql = sql.format(id=id, discord=discord, gbp=gbp, inventory = inventory)
@@ -106,8 +106,8 @@ if __name__ == '__main__':
 	#print(CFG)
 	try:
 		print("get user:", get_user(940014428752072765))
-		print("add user:", add_user(0, 69, 420, {"inventory":[1,2,3]}))
-		print("update user:", update(940014428752072765, 99, [4,5,6]))
+		print("add user:", add_user(0, 69, 420, [1, 2,3]))
+		print("update user:", update(940014428752072765, 69420, [6,7,8]))
 	except:
 		pass
 		
