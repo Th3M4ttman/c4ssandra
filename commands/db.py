@@ -126,7 +126,7 @@ class CUser():
 	def refresh(self):
 		try:
 			self.id, _, self.exp, self.gbp, self.inventory = get_user(self.discord)
-			self.inventory = json.loads(str(self.inventory))
+			self.inventory = json.loads(str(self.inventory).replace("'", '"'))
 		except Exception as e:
 			print(e)
 			self.exists = False
