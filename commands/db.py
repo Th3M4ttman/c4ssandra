@@ -40,7 +40,7 @@ WHERE DISCORD = {discord};"""
 			conn.close()
 			
 	#print(sql)
-	user = get_user(discord)
+	user = get_user(discord, create=False)
 	return user
 
 
@@ -72,7 +72,7 @@ VALUES ({id}, {discord}, {gbp}, {inventory});"""
 			conn.close()
 	
 	#print(sql)
-	return get_user(discord)
+	return get_user(discord, create=False)
 	
 def get_user(discord, create=True):
 	sql = f'select * from "public"."accounts" where DISCORD = {discord}'
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 	#print(CFG)
 	try:
 		print("get user:", get_user(940014428752072765))
-		print("add user:", add_user(1, 940014456207966232, 69420, []))
+		print("add user:", add_user(69420, 940014456207966232, 69420, []))
 		print("update user:", update(940014428752072765, 69420, [6,7,8]))
 	except:
 		pass
