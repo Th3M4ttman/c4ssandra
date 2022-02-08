@@ -46,12 +46,12 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(id, discord, gbp=0, exp=0, _inventory=[]):
-	print("Adding", id)
+def add_user(discord, gbp=0, exp=0, _inventory=[]):
+	print("Adding", discord)
 	inventory = """'{"inventory":!}'""".replace("!", str(_inventory))
 	sql = """INSERT INTO accounts(DISCORD, GBP, EXP, INVENTORY)
 VALUES ({discord}, {gbp}, {exp} {inventory});"""
-	sql = sql.format(id=id, discord=discord, gbp=gbp, exp=exp, inventory = inventory)
+	sql = sql.format(discord=discord, gbp=gbp, exp=exp, inventory = inventory)
 	
 	conn = None
 	
@@ -94,11 +94,11 @@ def get_user(discord, create=True):
 			user = None
 		
 		if user is None and create:
-			
-			cur.execute('SELECT LASTVAL()')
-			lastid = cur.fetchone()['lastval']
-			user = add_user(lastid+1, discord, 0, 0, [])
-			print("added user", lastid+1, ":", discord)
+			user = add_user(discord, 0, 0, [])
+			print("added user", user[0], ":", discord)
+			if conn is not None:
+				conn.close()
+			return user
 		# Commit the changes to the database
 		conn.commit()
 		# Close communication with the PostgreSQL database
@@ -188,7 +188,6 @@ if __name__ == '__main__':
 	#print(CFG)
 	try:
 		print("get user:", get_user(940014428752072765))
-		print("add user:", add_user(69420, 940014456207966232, 69420, 0, []))
 		print("update user:", update(940014428752072765, 69420, 0, [6,7,8]))
 	except:
 		pass
