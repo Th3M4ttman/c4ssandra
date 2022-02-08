@@ -1,16 +1,12 @@
 import psycopg2
 import os
 
-HOST = os.environ['HOST']
-DB = os.environ["DB"]
-PORT = os.environ['PORT']
-USER = os.environ['USER']
 PASS = os.environ['PASS']
 
-CFG = {"host":HOST,
-    "port":PORT,
-    "database":DB,
-    "user":USER,
+CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
+    "port": 5432,
+    "database":"d1a5os1go03lqu",
+    "user":"lptycphsmjryri",
     "password":PASS}
 
 def update(discord, gbp, inventory):
