@@ -99,6 +99,16 @@ async def rps(message, wager:int = 0):
 	player1 = message.author
 	if wager < 0:
 		wager = 0
+	try:
+		g = CUser(player1).gbp
+	except Exception as e:
+		print(e)
+		g = 0
+		
+	if g < wager:
+		await message.reply("Insufficient Funds")
+		await bs(message)
+		
 	await bs(message)
 	invite = await message.channel.send(f"{player1.mention} wants to play rock paper scissors, react with a thumbs up to play against them. the wager is ¥{intcomma(wager)}")
 	await invite.add_reaction("👍")
