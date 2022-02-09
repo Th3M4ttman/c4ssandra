@@ -6,7 +6,7 @@ level_range = []
 required = 100
 for _ in range(1, 501):
 	level_range.append(deepcopy(required))
-	required = int((required * 1.3))
+	required = int((required * 1.3)) + required
 
 def get_level(exp):
 	req = 0
@@ -17,11 +17,36 @@ def get_level(exp):
 		req += level
 		lvl += 1
 	return "Max Lvl"
+	
+def level_bounds(exp):
+	lvl = get_level(exp)
+	if lvl == "Max Lvl":
+		return 0, 0
+	if lvl == 1:
+		return 0, level_range[0]
+	
+	cur = level_range[lvl-2] 
+	next = level_range[lvl-1]
+	return cur, next	
 
+def level_str(exp):
+	cur, next = level_bounds(exp)
+	lvl = get_level(exp)
+	xp = int(exp)
+	for i, k in enumerate(level_range):
+		if i+1 == lvl:
+			break
+		xp -= k
+	
+	if cur == 0 and next == 0:
+		return "Max Level"
+	return f"Level {lvl} - {xp}/{next} exp"
+	
+	
 
 @cassandra.command(name="lvl")
 async def lvl(ctx):
 	u = CUser(ctx.message.author.id)
-	await ctx.message.channel.send(f"{ctx.message.author.display_name}: Level {get_level(u.exp)}")
+	await ctx.message.channel.send(f"{ctx.message.author.display_name}: {level_str(u.exp)}")
 	await ctx.message.delete()
 	
