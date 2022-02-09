@@ -3,7 +3,7 @@ import os
 import humanize
 from .items import construct
 from .items import items as _items
-from copy import deepcopy
+from copy import copy
 
 PASS = os.environ['PASS']
 
@@ -246,7 +246,7 @@ async def gbp(ctx):
 		if not u.exists:
 			print("Nope", m.id)
 			continue
-		users.append(deepcopy(mention))
+		users.append(copy(mention))
 		
 	
 	msg = f"Good Boy Points:"
