@@ -51,3 +51,29 @@ async def lvl(ctx):
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: {level_str(u.exp)}")
 	await ctx.message.delete()
 	
+from discord.ext import commands
+
+class LevelCog:
+    def __init__(self, bot):
+        self.bot = bot
+
+    @commands.command(pass_context=True)
+    @commands.has_role("Mod")
+    async def acommand(self, ctx, argument):
+       await self.bot.say("Stuff")        
+
+    async def on_message(self, message):
+        u = CUser(message.author.id)
+        c = len(message.content)
+        before = get_level(u.exp)
+        after = get_level(u.exp + c)
+        
+        u.update(exp=u.exp + c)
+        if before != after:
+        	await message.reply(f"Congratulations You Reached {get_level(u.exp)}")
+        
+
+def setup(bot):
+    bot.add_cog(LevelCog(bot))
+
+setup(cassandra)
