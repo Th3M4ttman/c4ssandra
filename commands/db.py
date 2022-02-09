@@ -266,6 +266,31 @@ async def inv(ctx):
 		inv[i] = f"\n\t{i}: " + str(Item(**item))
 		
 	await ctx.message.channel.send(f"Inventory: {','.join(inv)}")
+	
+@cassandra.command(name="gbpall")
+async def gbpall(ctx):
+	uid = ctx.message.author.id
+	u = CUser(uid)
+	if not u.exists:
+		await ctx.message.channel.send("No such user")
+		await ctx.message.delete()
+		return
+		
+	users = [u]
+	for m in ctx.guild.members:
+		mention = CUser(m.id)
+		if not u.exists:
+			print("Nope", m.id)
+			continue
+		users.append(copy(mention))
+		
+	
+	msg = f"Good Boy Points:"
+	for user in users:
+		msg += f"\n\t{cassandra.get_user(int(user.discord)).display_name}: ¥{humanize.intcomma(user.gbp)}"
+	await ctx.message.channel.send(msg)
+	await ctx.message.delete()
+
 
 @cassandra.command(name="use")
 async def use(ctx, *item):
