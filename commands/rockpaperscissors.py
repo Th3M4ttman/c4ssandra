@@ -86,12 +86,12 @@ def rps_game(players, moves):
 		out += "\nIts a Draw!"
 	elif result == 0:
 		out += f"\n{player1.mention} Wins!"
-		winner = player1
-		loser = player2
+		winner = player1.id
+		loser = player2.id
 	elif result == 1:
 		out += f"\n{player2.mention} Wins!"
-		winner = player2
-		loser = player1
+		winner = player2.id
+		loser = player1.id
 	return winner, loser, out
 
 @cassandra.command(name="rps", help="Play rock paper scissors")
@@ -155,8 +155,8 @@ async def rps(message, wager:int = 0):
 			if u.id == 0 and u.gbp < 69420:
 				u.update(gbp=69420)
 				
-		except:
-			pass
+		except Exception as e:
+			print(e)
 			
 		if winner is not None:
 			u = CUser(winner)
