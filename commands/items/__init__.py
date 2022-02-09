@@ -1,6 +1,6 @@
 
 from .items import *
-from . import test
+from . import shop, test
 
 """
 x = construct({"name":"testitem", "value":69420})

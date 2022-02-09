@@ -5,6 +5,7 @@ from discord import Message, Reaction
 import time
 from . import rockpaperscissors
 from . import db
+from . import levels
 
 import datetime
 
