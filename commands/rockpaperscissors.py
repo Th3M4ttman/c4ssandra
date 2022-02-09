@@ -160,6 +160,7 @@ async def rps(message, wager:int = 0):
 			u = CUser(winner)
 			u.update(gbp=u.gbp + wager)
 			msg += "\n" + cassandra.get_user(u.discord).display_name + ": ¥" + intcomma(u.gbp)
+			
 	
 	
 	await announce.delete()
