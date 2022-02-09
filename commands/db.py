@@ -3,6 +3,7 @@ import os
 import humanize
 from .items import construct
 from .items import items as _items
+from copy import deepcopy
 
 PASS = os.environ['PASS']
 
@@ -238,7 +239,20 @@ async def gbp(ctx):
 		await ctx.message.channel.send("No such user")
 		await ctx.message.delete()
 		return
-	await ctx.message.channel.send(f"{ctx.message.author.display_name}: ¥{humanize.intcomma(u.gbp)}")
+		
+	users = [u]
+	for m in ctx.message.mentions:
+		mention = CUser(m.id)
+		if not u.exists:
+			print("Nope", m.id)
+			continue
+		users.append(deepcopy(mention))
+		
+	
+	msg = f"Good Boy Points:"
+	for user in users:
+		msg += f"\n\t{cassandra.get_user(int(user.discord)).display_name}: ¥{humanize.intcomma(user.gbp)}"
+	await ctx.message.channel.send(msg)
 	await ctx.message.delete()
 
 from discord import User
