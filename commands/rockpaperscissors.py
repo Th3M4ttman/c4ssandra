@@ -100,7 +100,7 @@ async def rps(message, wager:int = 0):
 	if wager < 0:
 		wager = 0
 	try:
-		g = CUser(player1).gbp
+		g = CUser(player1.id).gbp
 	except Exception as e:
 		print(e)
 		g = 0
