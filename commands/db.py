@@ -269,17 +269,10 @@ async def inv(ctx):
 	
 @cassandra.command(name="gbpall")
 async def gbpall(ctx):
-	uid = ctx.message.author.id
-	u = CUser(uid)
-	if not u.exists:
-		await ctx.message.channel.send("No such user")
-		await ctx.message.delete()
-		return
-		
-	users = [u]
+	users = []
 	for m in ctx.guild.members:
 		mention = CUser(m.id)
-		if not u.exists:
+		if not m.exists:
 			print("Nope", m.id)
 			continue
 		users.append(copy(mention))
