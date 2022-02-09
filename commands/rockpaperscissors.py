@@ -148,7 +148,9 @@ async def rps(message, wager:int = 0):
 		u = CUser(loser)
 		
 		u.update(gbp=u.gbp - wager)
-		msg += "\n" + cassandra.get_user(u.discord).display_name + ": ¥" + intcomma(u.gbp)
+		for member in ctx.guild.members:
+			if member.id == u.discord:
+				msg += "\n" + member.display_name + ": ¥" + intcomma(u.gbp)
 		try:
 			if u.id == 0 and u.gbp < 69420:
 				u.update(gbp=69420)
@@ -159,7 +161,9 @@ async def rps(message, wager:int = 0):
 		if winner is not None:
 			u = CUser(winner)
 			u.update(gbp=u.gbp + wager)
-			msg += "\n" + cassandra.get_user(u.discord).display_name + ": ¥" + intcomma(u.gbp)
+			for member in ctx.guild.members:
+				if member.id == u.discord:
+					msg += "\n" + member.display_name + ": ¥" + intcomma(u.gbp)
 			
 	
 	
