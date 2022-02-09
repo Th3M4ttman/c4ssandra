@@ -70,6 +70,6 @@ class LevelCog(commands.Cog):
         
 
 def setup(bot):
+    print("Loading Level Extension")
     bot.add_cog(LevelCog(bot))
 
-setup(cassandra)
