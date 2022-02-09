@@ -53,15 +53,11 @@ async def lvl(ctx):
 	
 from discord.ext import commands
 
-class LevelCog:
+class LevelCog(commands.Cog):
     def __init__(self, bot):
-        self.bot = bot
-
-    @commands.command(pass_context=True)
-    @commands.has_role("Mod")
-    async def acommand(self, ctx, argument):
-       await self.bot.say("Stuff")        
-
+       self.bot = bot
+       super().__init__(self)
+       
     async def on_message(self, message):
         u = CUser(message.author.id)
         c = len(message.content)
