@@ -14,7 +14,7 @@ class LevelCog(commands.Cog):
         before = get_level(u.exp)
         after = get_level(u.exp + c)
         print("exp added:", c)
-        update(u.id, gbp=u.gbp, _inventory=u.inventory, exp=u.exp + c)
+        update(u.discord, gbp=u.gbp, _inventory=u.inventory, exp=u.exp + c)
         
         if before != after:
         	await message.reply(f"Congratulations You Reached {get_level(u.exp)}")
