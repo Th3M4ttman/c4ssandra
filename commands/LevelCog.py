@@ -6,7 +6,8 @@ class LevelCog(commands.Cog):
     def __init__(self, bot):
        self.bot = bot
        super().__init__()
-       
+      
+    @commands.Cog.listener()
     async def on_message(self, message):
         u = CUser(message.author.id)
         c = len(message.content)
