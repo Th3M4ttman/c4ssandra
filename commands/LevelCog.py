@@ -17,7 +17,10 @@ class LevelCog(commands.Cog):
         update(u.discord, gbp=u.gbp, _inventory=u.inventory, exp=u.exp + c)
         
         if before != after:
-        	await message.reply(f"Congratulations You Reached {get_level(u.exp)}")
+        	nl = str(get_level(u.exp))
+        	if nl.isnumeric():
+        		nl = f"Level {nl}"
+        	await message.reply(f"Congratulations You Reached {nl}")
         
 
 def setup(bot):
