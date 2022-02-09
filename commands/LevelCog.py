@@ -1,5 +1,6 @@
 from discord.ext import commands
 from .levels import CUser, get_level
+from .db import update
 
 class LevelCog(commands.Cog):
     def __init__(self, bot):
@@ -11,8 +12,9 @@ class LevelCog(commands.Cog):
         c = len(message.content)
         before = get_level(u.exp)
         after = get_level(u.exp + c)
+        print("exp added:", c)
+        update(u.id, gbp=u.gbp, _inventory=u.inventory, exp=u.exp + c)
         
-        u.update(exp=u.exp + c)
         if before != after:
         	await message.reply(f"Congratulations You Reached {get_level(u.exp)}")
         
