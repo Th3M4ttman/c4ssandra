@@ -1,6 +1,7 @@
 from copy import deepcopy
 from .bot import cassandra
 from .db import CUser
+from humanize import intcomma
 level_range = []
 
 required = 100
@@ -40,7 +41,7 @@ def level_str(exp):
 	
 	if cur == 0 and next == 0:
 		return "Max Level"
-	return f"Level {lvl} - {xp}/{next} exp"
+	return f"Level {lvl} - {intcomma(xp)}/{intcomma(next)} exp"
 	
 	
 
