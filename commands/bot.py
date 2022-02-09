@@ -68,4 +68,4 @@ async def bs(ctx:discord.ext.commands.Context):
 			return await ch.send(content=content)
 	
 
-cassandra.load_extension("LevelCog")
+cassandra.load_extension("commands.LevelCog")

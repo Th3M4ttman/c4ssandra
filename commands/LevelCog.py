@@ -1,5 +1,5 @@
 from discord.ext import commands
-from .levels import CUser, get_level
+from levels import CUser, get_level
 
 class LevelCog(commands.Cog):
     def __init__(self, bot):
