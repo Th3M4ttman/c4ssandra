@@ -56,7 +56,7 @@ from discord.ext import commands
 class LevelCog(commands.Cog):
     def __init__(self, bot):
        self.bot = bot
-       super().__init__(self)
+       super().__init__()
        
     async def on_message(self, message):
         u = CUser(message.author.id)
