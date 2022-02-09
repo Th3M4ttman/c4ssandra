@@ -1,5 +1,5 @@
 
-from items import *
+from .items import *
 from copy import deepcopy
 from datetime import datetime
 
