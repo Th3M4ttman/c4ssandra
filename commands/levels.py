@@ -41,7 +41,7 @@ def level_str(exp):
 	
 	if cur == 0 and next == 0:
 		return "Max Level"
-	return f"Level {lvl} - {intcomma(xp)}/{intcomma(next)} exp"
+	return f"Level {lvl}\n[{intcomma(xp)} / {intcomma(next)}] exp"
 	
 	
 
