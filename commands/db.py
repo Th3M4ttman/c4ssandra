@@ -153,6 +153,11 @@ class CUser():
 		inv["inventory"].append(item.to_json())
 		return self.update(inventory=self.inventory)
 		
+	def remove_item(self, i):
+		inv = self.inventory
+		inv["inventory"].pop(i)
+		return self.update(inventory=self.inventory)
+		
 		
 		
 import json		
@@ -256,7 +261,9 @@ async def use(ctx, *item):
 	
 	u = CUser(ctx.message.author.id)
 	inv = u.inventory["inventory"]
+	item_indexes = []
 	if item.isnumeric():
+		item_indexes.append(int(item))
 		item = construct(inv[int(item)])
 	else:
 		its = []
@@ -273,20 +280,22 @@ async def use(ctx, *item):
 		if len(its) > 1:
 			msg = "Which one:"
 			for i, it in enumerate(its):
-				msg += f"{i}: {it.data}"
+				msg += f"\n\t{i}: {it.val_str}"
 			await ctx.message.reply(msg)
-			return
-		
-		item = its[0]
-		
+			item = its[0]
+		else:
+			item = its[0]
+	
 	msg = item.use()
+	u.remove_item(item_indexes[0])
 	await ctx.message.channel.send(str(msg))
 
 	
 @cassandra.command(name="testitem")
 async def testitem(ctx):
 	u = CUser(ctx.message.author.id)
-	u.add_item(Item("testitem", value = 600))
+	u.add_item(Item())
+	u.add_item(Item(name="Testo", cls="Testo"))
 	await ctx.message.channel.send("Gave testitem")
 	await inv(ctx)
 	

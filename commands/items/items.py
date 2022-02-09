@@ -6,9 +6,9 @@ def define_item(name, cls):
 	items[name] = cls
 	
 def construct(item):
-	if "class" in item.keys():
-		if item["class"] in items.keys():
-			return items[item["class"]](item)
+	if "cls" in item.keys():
+		if item["cls"] in items.keys():
+			return items[item["cls"]](item)
 	return Item(item)
 
 class Item():
@@ -18,10 +18,10 @@ class Item():
 			self.data["name"] = name
 		if "value" not in self.data.keys():
 			self.data["value"] = value
-		if "class" not in self.data.keys():
-			self.data["class"] = "item"
+		if "cls" not in self.data.keys():
+			self.data["cls"] = "item"
 			
-		self.cls = self.data["class"]
+		self.cls = self.data["cls"]
 		self.name = self.data["name"]
 		self.value = self.data["value"]
 		
