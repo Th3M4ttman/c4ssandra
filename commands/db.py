@@ -271,6 +271,7 @@ async def use(ctx, *item):
 			try:
 				if it["name"].strip().lower() == item.lower():
 					its.append(construct(it))
+					item_indexes.append(i)
 			except:
 				pass
 		if len(its) == 0:

@@ -67,3 +67,5 @@ async def bs(ctx:discord.ext.commands.Context):
 		if str(ch) == "bot_spam":
 			return await ch.send(content=content)
 	
+
+
