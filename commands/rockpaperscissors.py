@@ -148,7 +148,7 @@ async def rps(message, wager:int = 0):
 		u = CUser(loser)
 		
 		u.update(gbp=u.gbp - wager)
-		for member in ctx.guild.members:
+		for member in message.guild.members:
 			if member.id == u.discord:
 				msg += "\n" + member.display_name + ": ¥" + intcomma(u.gbp)
 		try:
@@ -161,7 +161,7 @@ async def rps(message, wager:int = 0):
 		if winner is not None:
 			u = CUser(winner)
 			u.update(gbp=u.gbp + wager)
-			for member in ctx.guild.members:
+			for member in message.guild.members:
 				if member.id == u.discord:
 					msg += "\n" + member.display_name + ": ¥" + intcomma(u.gbp)
 			
