@@ -271,11 +271,12 @@ async def inv(ctx):
 async def gbpall(ctx):
 	users = []
 	for m in ctx.guild.members:
-		mention = CUser(m.id)
+		
+		m = CUser(m.id)
 		if not m.exists:
 			print("Nope", m.id)
 			continue
-		users.append(copy(mention))
+		users.append(copy(m))
 		
 	
 	msg = f"Good Boy Points:"
