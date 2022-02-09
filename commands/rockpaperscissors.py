@@ -3,6 +3,8 @@ import random
 from discord import Message, Reaction
 import time
 import discord
+from .db import CUser
+from humanize import intcomma
 
 async def bs(ctx:discord.ext.commands.Context):
 	msg = ctx.message
@@ -78,22 +80,38 @@ def rps_game(players, moves):
 	emoji = ("🪨", "📃", "✂️")
 	result = rock_paper_scissors(move1, move2)
 	out = str(player1.mention) + "   " +  emoji[move1] + "  -vs-  " + emoji[move2] + "   " + str(player2.mention) +"\n"
+	winner = None
+	loser = None
 	if result == 2:
 		out += "\nIts a Draw!"
 	elif result == 0:
 		out += f"\n{player1.mention} Wins!"
+		winner = player1
+		loser = player2
 	elif result == 1:
 		out += f"\n{player2.mention} Wins!"
-	return out
+		winner = player2
+		loser = player1
+	return winner, loser, out
 
 @cassandra.command(name="rps", help="Play rock paper scissors")
-async def rps(message):
+async def rps(message, wager:int = 0):
 	player1 = message.author
+	if wager < 0:
+		wager = 0
 	await bs(message)
-	invite = await message.channel.send(f"{player1.mention} wants to play rock paper scissors, react with a thumbs up to play against them")
+	invite = await message.channel.send(f"{player1.mention} wants to play rock paper scissors, react with a thumbs up to play against them. the wager is ¥{intcomma(wager)}")
 	await invite.add_reaction("👍")
 	def check(reaction, user):
-		return user not in (player1, invite.author) and str(reaction.emoji) == '👍'	
+		u = CUser(user.id)
+		can_cover = False
+		try:
+			if u.gbp >= wager:
+				can_cover = True
+		except:
+			pass
+			
+		return user not in (player1, invite.author) and str(reaction.emoji) == '👍' and can_cover
 	try:
 		_, player2 = await cassandra.wait_for('reaction_add', timeout=10.0, check=check)
 	except:
@@ -124,5 +142,31 @@ async def rps(message):
 		move2, player2 = await cassandra.wait_for('reaction_add',  check=checkmove2)
 		move2 = ("🪨", "📃", "✂️").index(str(move2))
 	
+	winner, loser, msg = rps_game((player1, player2), (move1, move2))
+		
+	if loser is not None and wager > 0:
+		u = CUser(loser)
+		
+		u.update(gbp=u.gbp - wager)
+		msg += "\n" + cassandra.get_user(u.discord).display_name + ": ¥" + intcomma(u.gbp)
+		try:
+			if u.id == 0 and u.gbp < 69420:
+				u.update(gbp=69420)
+				
+		except:
+			pass
+			
+		if winner is not None:
+			u = CUser(winner)
+			u.update(gbp=u.gbp + wager)
+			msg += "\n" + cassandra.get_user(u.discord).display_name + ": ¥" + intcomma(u.gbp)
+	
+	
 	await announce.delete()
-	await message.channel.send(rps_game((player1, player2), (move1, move2)))
+	await message.channel.send(msg)
+	
+			
+		
+	
+			
+	
