@@ -15,9 +15,11 @@ class Cassandra(Bot):
 		
 	async def on_ready(self):
 		print(f'{self.user} has connected to Discord!')
-		u = self.get_user(941188857167245362)
-		
-		await u.send("Rebooted")
+		for guild in self.guilds:
+			for m in guild.members:
+				if m.display_name == "Th3M4ttman"
+					await u.send("Rebooted")
+					return
 		
 	
 	async def on_message(self, message):
