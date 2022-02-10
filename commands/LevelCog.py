@@ -4,7 +4,6 @@ from .bot import cassandra
 import discord
 
 
-	
 
 class LevelCog(commands.Cog):
 	def __init__(self, bot):

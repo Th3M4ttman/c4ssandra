@@ -2,7 +2,8 @@ from .items import define_item, Item
 from discord.ext.commands.context import Context
 from discord.ext.commands import Bot
 from humanize import intcomma
-
+from asyncio import sleep
+	
 
 class Testo(Item):
 	async def use(self, ctx:Context, bot:Bot, *args, **kwargs):
@@ -24,6 +25,8 @@ class Crystal(Item):
 			exp = self.data["exp"]
 		else:
 			exp = 10
+			
+		await sleep(2)
 		
 		await bot.cogs["LevelCog"].add_exp(ctx.author.id, exp, ctx.channel, a=True)
 		#print("Crystal Added", exp, "Exp")
