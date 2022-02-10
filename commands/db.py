@@ -374,10 +374,38 @@ from . import LevelCog
 from .items.shop import SHOP
 
 @cassandra.command(name="shop")
-async def shop(ctx, task=None, item=None, num=1):
+async def shop(ctx, task:str =None, item:str =None, num:int=1):
+	
+	u = CUser(ctx.message.author.id)
 	if task is None:
 		await ctx.channel.send(str(SHOP))
 		await ctx.message.delete()
+	
+	if task.lower() == "buy" and item:
+		if item.isnumeric():
+			item = SHOP.construct(int(item))
+		else:
+			item = SHOP.construct(item)
+		if item is None:
+				ctx.message.channel.send("Not for sale")
+				return
+				
+		total = item.value * num
+		if total <= u.gbp:
+			for _ in range(0, num):
+				u.add_item(Item(**item.data))
+				u.gbp -= item.value
+				u.update()
+		else:
+			await ctx.message.reply(f"Insufficient Funds\ncost: {item.val_str}\nbalance: ¥{humanize.intcomma(u.gbp)}")
+			return
+		await ctx.message.reply(f"Bought {num} * {item.name}.\nTotal: ¥{humanize.intcomma(total)}")
+		await inv(ctx)
+		await ctx.message.delete()
+		
+	
+		
+		
 
 
 if __name__ == '__main__':
