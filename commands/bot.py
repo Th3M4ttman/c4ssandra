@@ -17,8 +17,8 @@ class Cassandra(Bot):
 		print(f'{self.user} has connected to Discord!')
 		for guild in self.guilds:
 			for m in guild.members:
-				if m.display_name == "Th3M4ttman"
-					await u.send("Rebooted")
+				if m.display_name == "Th3M4ttman":
+					await m.send("Rebooted")
 					return
 		
 	
