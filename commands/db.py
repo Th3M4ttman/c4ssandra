@@ -17,6 +17,7 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
 def update(discord, gbp, exp, _inventory, stats):
 	if stats is None: stats = {}
 	inventory = json.dumps(_inventory)
+	stats = json.dumps(stats)
 	#print("inventory =", inventory)
 	
 	sql = f"""UPDATE accounts
