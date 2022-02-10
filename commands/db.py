@@ -319,8 +319,8 @@ async def use(ctx, *item):
 			item = its[0]
 		else:
 			item = its[0]
-	
-	msg = item.use(item, ctx, cassandra)
+			
+	msg = await item.use(ctx=ctx, bot=cassandra)
 	u.remove_item(item_indexes[0])
 	await ctx.message.channel.send(str(msg))
 

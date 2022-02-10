@@ -1,4 +1,6 @@
 from humanize import intcomma
+from discord.ext.commands.context import Context
+from discord.ext.commands import Bot
 
 items = {}
 
