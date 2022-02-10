@@ -29,6 +29,7 @@ class LoungeCog(Cog):
 	
 	@Cog.listener()
 	async def on_ready(self):
+		print("Loaded Lounge Cog")
 		if not check_lounge.is_running():
 			print("Starting lounge check loop")
 			await check_lounge.start(self)
