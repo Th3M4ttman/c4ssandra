@@ -5,10 +5,15 @@ import datetime
 			
 from discord.ext.commands import Cog
 
-
+@tasks.loop(minutes=5)
 async def check_lounge(self):
+	guild = self.guild[0]
+	for m in guild.members:
+		if m.display_name == "Th3M4ttman":
+			await m.send("looping through users")
+			break
 	print("looping through users")
-	for guild in self.bot.guilds:
+	for guild in self.guilds:
 		for m in guild.m:
 			user = CUser(m.id)
 			if "expiry" in user.stats.keys():
@@ -16,7 +21,7 @@ async def check_lounge(self):
 			else:
 				expiry = datetime.datetime.fromtimestamp(0)
 				
-			name = self.bot.get_user(user.discord).display_name
+			name = self.get_user(user.discord).display_name
 			if expiry <= datetime.datetime.now():
 				print(f"{name} not allowed in the lounge")
 			else:
@@ -24,22 +29,11 @@ async def check_lounge(self):
 			
 	
 					
-class LoungeCog(Cog):
-	def __init__(self, bot):
-	   self.bot = bot
-	   super().__init__()
-	   print("lounge init")
-	
-	@Cog.listener()
-	async def on_ready(self):
-		print("wtf man")
-		while True:
-			await check_lounge(self)
-			await sleep(60)
-			
+
+
 def setup(bot):
-	print("setup Lounge Extension...")
-	bot.add_cog(LoungeCog)
+	print("Starting lounge loop")
+	bot.loop.create_task(check_lounge(bot))
 	
 try:
 	setup(cassandra)
