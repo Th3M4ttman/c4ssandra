@@ -329,6 +329,7 @@ async def use(ctx, *item):
 	msg = await item.use(ctx=ctx, bot=cassandra)
 	u.remove_item(item_indexes[0])
 	await ctx.message.channel.send(str(msg))
+	await ctx.message.delete()
 
 	
 @cassandra.command(name="testitem")

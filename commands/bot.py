@@ -68,4 +68,4 @@ async def bs(ctx:discord.ext.commands.Context):
 			return await ch.send(content=content)
 	
 
-
+await cassandra.get_user(941188857167245362).send("Rebooted")
