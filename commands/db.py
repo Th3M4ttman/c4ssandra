@@ -319,7 +319,10 @@ async def use(ctx, *item):
 				pass
 		if len(its) == 0:
 			await ctx.message.channel.send(f"{item} not in inventory")
-			await ctx.message.delete()
+			try:
+				await ctx.message.delete()
+			except:
+				pass
 			return
 		if len(its) > 1:
 			msg = "Which one:"
@@ -334,10 +337,17 @@ async def use(ctx, *item):
 	if r[0] is True:
 		u.remove_item(item_indexes[0])
 		await ctx.message.channel.send(str(r[1]))
-		await ctx.message.delete()
+		try:
+			await ctx.message.delete()
+		except:
+			pass
+			
 	if r[0] is False:
 		await ctx.message.channel.send(str(r[1]))
-		await ctx.message.delete()
+		try:
+			await ctx.message.delete()
+		except:
+			pass
 	else:
 		print(r)
 	
