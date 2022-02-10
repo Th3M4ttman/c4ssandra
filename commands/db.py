@@ -432,7 +432,10 @@ async def shop(ctx, task:str =None, item:str =None, num:int=1):
 			return
 		await ctx.message.reply(f"Bought {num} * {item.name}.\nTotal: ¥{humanize.intcomma(total)}")
 		await inv(ctx)
-		await ctx.message.delete()
+		try:
+			await ctx.message.delete()
+		except:
+			pass
 		
 	
 		
