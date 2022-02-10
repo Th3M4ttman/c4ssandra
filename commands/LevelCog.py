@@ -28,7 +28,7 @@ class LevelCog(commands.Cog):
        await add_exp(message.author.id, c, message)
      
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, reaction, user):
+    async def on_reaction_add(self, reaction, user):
     	await add_exp(user.id, 20, reaction)
     
     
