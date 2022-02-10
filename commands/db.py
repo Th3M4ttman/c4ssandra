@@ -3,6 +3,7 @@ import os
 import humanize
 from .items import construct
 from .items import items as _items
+from .LevelCog import add_exp
 from copy import copy
 
 PASS = os.environ['PASS']
@@ -158,6 +159,10 @@ class CUser():
 		inv = self.inventory
 		inv["inventory"].pop(i)
 		return self.update(inventory=self.inventory)
+	
+	async def add_exp(self, exp, channel):
+		await add_exp(self.discord, exp, channel)
+		return self.refresh()
 		
 		
 		
@@ -326,10 +331,13 @@ async def use(ctx, *item):
 		else:
 			item = its[0]
 			
-	msg = await item.use(ctx=ctx, bot=cassandra)
-	u.remove_item(item_indexes[0])
-	await ctx.message.channel.send(str(msg))
-	await ctx.message.delete()
+	consume, msg = await item.use(ctx=ctx, bot=cassandra, user=u)
+	if consume is True:
+		u.remove_item(item_indexes[0])
+	if consume is False:
+		await ctx.message.channel.send(str(msg))
+		await ctx.message.delete()
+	
 
 	
 @cassandra.command(name="testitem")

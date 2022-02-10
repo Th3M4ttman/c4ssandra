@@ -34,14 +34,22 @@ class Shop():
 		return out
 
 SHOP = Shop()
+
 poo = construct({"name":"poo", "value":5, "cls":"Testo"})
 superpoo = construct({"name":"superpoo", "value":50, "cls":"Testo"})
 
 SHOP.add_item(poo)
 SHOP.add_item(superpoo)
 
+scryst = construct({"name":"Small EXP Crystal", "value":50, "cls":"Crystal", "exp":100})
+lcryst = construct({"name":"Large EXP Crystal", "value":500, "cls":"Crystal", "exp":1000})
 
+
+SHOP.add_item(scryst)
+SHOP.add_item(lcryst)
+
+"""
 x = SHOP.construct(1)
 x.value *= 0.9
 print(SHOP)
-
+"""
