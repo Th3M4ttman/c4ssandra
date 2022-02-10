@@ -21,8 +21,9 @@ class LevelCog(commands.Cog):
 		if payload is not None:
 			await self.add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
 	
-	async def add_exp(self, id, exp, channel):
-		print("Adding", exp, "exp")
+	async def add_exp(self, id, exp, channel, a=False):
+		if a:
+			print("Adding", exp, "exp")
 		u = CUser(id)
 		before = get_level(u.exp)
 		after = get_level(u.exp + exp)
