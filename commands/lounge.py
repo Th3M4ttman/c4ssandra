@@ -5,7 +5,7 @@ import datetime
 			
 from discord.ext.commands import Cog
 
-@tasks.loop(minutes=5)
+
 async def check_lounge(self):
 	print("looping through users")
 	for guild in self.bot.guilds:
@@ -21,18 +21,24 @@ async def check_lounge(self):
 				print(f"{name} not allowed in the lounge")
 			else:
 				print(f"{name} is allowed in the lounge")
+			
+	
 					
 class LoungeCog(Cog):
 	def __init__(self, bot):
 	   self.bot = bot
 	   super().__init__()
-	   print("Loaded Lounge Cog")
-	   if not check_lounge.is_running():
-	   	print("Starting lounge check loop")
-	   	self.check_task = check_lounge.start(self)
+	   print("lounge init")
+	
+	@Cog.listener()
+	async def on_ready(self):
+		print("wtf man")
+		while True:
+			await check_lounge(self)
+			await sleep(60)
 			
 def setup(bot):
-	print("Loading Lounge Extension")
+	print("setup Lounge Extension...")
 	bot.add_cog(LoungeCog)
 	
 try:
