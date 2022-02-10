@@ -3,7 +3,6 @@ import os
 import humanize
 from .items import construct
 from .items import items as _items
-from .LevelCog import add_exp
 from copy import copy
 
 PASS = os.environ['PASS']
@@ -160,9 +159,6 @@ class CUser():
 		inv["inventory"].pop(i)
 		return self.update(inventory=self.inventory)
 	
-	async def add_exp(self, exp, channel):
-		await add_exp(self.discord, exp, channel)
-		return self.refresh()
 		
 		
 		
