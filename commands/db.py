@@ -330,7 +330,7 @@ async def use(ctx, *item):
 		else:
 			item = its[0]
 			
-	r = item.use(ctx=ctx, bot=cassandra, user=u)
+	r = await item.use(ctx=ctx, bot=cassandra, user=u)
 	if r[0] is True:
 		u.remove_item(item_indexes[0])
 		await ctx.message.channel.send(str(r[1]))
