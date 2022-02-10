@@ -5,22 +5,24 @@ import datetime
 			
 from discord.ext.commands import Cog
 
-@tasks.loop(minutes=5)
+
 async def check_lounge(self):
-	print("looping through users")
-	for guild in self.guilds:
-		for m in guild.m:
-			user = CUser(m.id)
-			if "expiry" in user.stats.keys():
-				expiry = datetime.datetime.fromtimestamp(user.stats["expiry"])
-			else:
-				expiry = datetime.datetime.fromtimestamp(0)
-				
-			name = self.get_user(user.discord).display_name
-			if expiry <= datetime.datetime.now():
-				print(f"{name} not allowed in the lounge")
-			else:
-				print(f"{name} is allowed in the lounge")
+	while True:
+		print("looping through users")
+		for guild in self.guilds:
+			for m in guild.m:
+				user = CUser(m.id)
+				if "expiry" in user.stats.keys():
+					expiry = datetime.datetime.fromtimestamp(user.stats["expiry"])
+				else:
+					expiry = datetime.datetime.fromtimestamp(0)
+					
+				name = self.get_user(user.discord).display_name
+				if expiry <= datetime.datetime.now():
+					print(f"{name} not allowed in the lounge")
+				else:
+					print(f"{name} is allowed in the lounge")
+		await sleep(60)
 			
 	
 					
