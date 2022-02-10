@@ -29,6 +29,7 @@ class LevelCog(commands.Cog):
      
     @commands.Cog.listener()
     async def on_raw_eaction_add(self, payload=None):
+    	print("reaction", self, payload)
     	if payload is not None:
     		id = payload.member.id
     		await add_exp(id, 20, payload.channel)
