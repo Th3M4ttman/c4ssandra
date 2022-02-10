@@ -17,7 +17,7 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
 def update(discord, gbp, exp, _inventory):
 	""" update vendor name based on the vendor id """
 	inventory = json.dumps(_inventory)
-	print("inventory =", inventory)
+	#print("inventory =", inventory)
 	
 	sql = f"""UPDATE accounts
 SET GBP = {gbp},
@@ -334,6 +334,8 @@ async def use(ctx, *item):
 			item = its[0]
 			
 	r = await item.use(ctx=ctx, bot=cassandra, user=u)
+	u.update()
+	
 	if r[0] is True:
 		u.remove_item(item_indexes[0])
 		await ctx.message.channel.send(str(r[1]))
@@ -341,7 +343,8 @@ async def use(ctx, *item):
 			await ctx.message.delete()
 		except:
 			pass
-			
+	
+	
 	if r[0] is False:
 		await ctx.message.channel.send(str(r[1]))
 		try:
