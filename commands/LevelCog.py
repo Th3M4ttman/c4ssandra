@@ -6,9 +6,9 @@ import discord
 
 
 class LevelCog(commands.Cog):
-	def __init__(self, bot):
+	async def __init__(self, bot):
 	   self.bot = bot
-	   super().__init__()
+	   await super().__init__()
 	  
 	@commands.Cog.listener()
 	async def on_message(self, message):
@@ -20,7 +20,6 @@ class LevelCog(commands.Cog):
 		if payload is not None:
 			await self.add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
 	
-	@commands.Cog.listener()
 	async def add_exp(self, id, exp, channel, a=False):
 		if a:
 			print("Adding", exp, "exp")
