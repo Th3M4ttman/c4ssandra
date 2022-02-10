@@ -33,9 +33,10 @@ class LevelCog(commands.Cog):
 				nl = f"Level {nl}"
 			await channel.send(f"Congratulations {cassandra.get_user(u.discord).mention} You Reached {nl}")
 		
-		print("Before:", u.gbp)
-		u.update(gbp=u.exp + exp)
-		print("After:", u.gbp)
+		print("Before:", u.exp)
+		update(discord=u.discord, exp=u.exp, gbp=u.gbp, _inventory=u.inventory)
+		u.refresh()
+		print("After:", u.exp)
 
 
 
