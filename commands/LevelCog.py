@@ -1,6 +1,6 @@
 from discord.ext import commands
-from bot.commands.levels import CUser, get_level
-from bot.commands.db import update
+from .commands.levels import CUser, get_level
+from .commands.db import update
 
 class LevelCog(commands.Cog):
     def __init__(self, bot):
