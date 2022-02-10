@@ -12,6 +12,8 @@ async def check_lounge(self):
 		for guild in self.guilds:
 			for m in guild.members:
 				user = CUser(m.id)
+				if user.stats is None:
+					user.update(stats={})
 				if "expiry" in user.stats.keys():
 					expiry = datetime.datetime.fromtimestamp(user.stats["expiry"])
 				else:
