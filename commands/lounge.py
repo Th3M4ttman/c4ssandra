@@ -4,12 +4,13 @@ from .db import CUser, cassandra
 import datetime		
 			
 from discord.ext.commands import Cog
-
+import discord
 
 async def check_lounge(self):
 	while True:
 		print("looping through users")
 		for guild in self.guilds:
+			lounge_role = discord.utils.get(guild.roles, name = "lounge")
 			for m in guild.members:
 				user = CUser(m.id)
 				if user.stats is None:
@@ -19,11 +20,21 @@ async def check_lounge(self):
 				else:
 					expiry = datetime.datetime.fromtimestamp(0)
 					
-				name = self.get_user(user.discord).display_name
+				name = m.display_name
 				if expiry <= datetime.datetime.now():
-					print(f"{name} not allowed in the lounge")
+					try:
+						await m.add_roles(lounge_role)
+						print("Added lounge role to", name, datetime.datetime.now() - expiry)
+					except:
+						pass
+					
 				else:
-					print(f"{name} is allowed in the lounge")
+					try:
+						await m.remove_roles(lounge_role)
+						print("Removed lounge role from", name)
+					except:
+						pass
+					
 		await sleep(60)
 			
 	
