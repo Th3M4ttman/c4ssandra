@@ -338,6 +338,8 @@ async def use(ctx, *item):
 	if r[0] is False:
 		await ctx.message.channel.send(str(r[1]))
 		await ctx.message.delete()
+	else:
+		print(r)
 	
 
 	
