@@ -22,8 +22,9 @@ class LevelCog(commands.Cog):
 	
 	async def add_exp(self, id, exp, channel, a=True):
 		if a:
-			print("Adding", exp, "exp")
-			print(f"Id: {id}")
+			pass
+			#print("Adding", exp, "exp")
+			#print(f"Id: {id}")
 		u = CUser(id)
 		before = get_level(u.exp)
 		after = get_level(u.exp + exp)
@@ -34,12 +35,12 @@ class LevelCog(commands.Cog):
 			await channel.send(f"Congratulations {cassandra.get_user(u.discord).mention} You Reached {nl}")
 		
 		
-		u.refresh()
+		
 		if self.bot.get_user(id).display_name != "C4ssandra":
-			print("Before:", u.exp)
+			print("Before:", u.refresh().exp)
 		update(discord=u.discord, exp=u.exp+exp, gbp=u.gbp, _inventory=u.inventory)
 		if self.bot.get_user(id).display_name != "C4ssandra":
-			print("After:", u.exp)
+			print("After:", u.refresh().exp)
 
 
 
