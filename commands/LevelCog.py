@@ -6,9 +6,9 @@ import discord
 
 
 class LevelCog(commands.Cog):
-	async def __init__(self, bot):
+	def __init__(self, bot):
 	   self.bot = bot
-	   await super().__init__()
+	   super().__init__()
 	  
 	@commands.Cog.listener()
 	async def on_message(self, message):
@@ -27,13 +27,12 @@ class LevelCog(commands.Cog):
 		u = CUser(id)
 		before = get_level(u.exp)
 		after = get_level(u.exp + exp)
-		update(u.discord, gbp=u.gbp, _inventory=u.inventory, exp=u.exp + exp)
 		if before != after:
 			nl = str(get_level(u.exp))
 			if nl.isnumeric():
 				nl = f"Level {nl}"
 			await channel.send(f"Congratulations {cassandra.get_user(u.discord).mention} You Reached {nl}")
-		return u.update()
+		return u.update(gbp=u.exp + exp)
 
 
 
