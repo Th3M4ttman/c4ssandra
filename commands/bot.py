@@ -1,6 +1,7 @@
 from discord.ext.commands import Bot
 import discord
 import os
+from . import lounge
 
 ROOT = os.path.abspath("/".join(__file__.split("/")[0:-1]))
 
@@ -15,6 +16,8 @@ class Cassandra(Bot):
 		
 	async def on_ready(self):
 		print(f'{self.user} has connected to Discord!')
+		if not lounge.test.is_running():
+			lounge.test.start(self)
 		for guild in self.guilds:
 			for m in guild.members:
 				if m.display_name == "Th3M4ttman":
