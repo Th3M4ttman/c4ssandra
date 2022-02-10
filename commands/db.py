@@ -288,8 +288,14 @@ async def gbpall(ctx):
 
 @cassandra.command(name="use")
 async def use(ctx, *item):
-	if type(item) != str:
-		item = " ".join(item)
+	_item = item[0]
+	for i, it in enumerate(item):
+		if i == 0:
+			continue
+		if "@" not in it:
+			_item += " " + it
+			
+	item = _item
 		
 	
 	u = CUser(ctx.message.author.id)
