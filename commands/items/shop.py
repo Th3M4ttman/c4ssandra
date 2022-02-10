@@ -1,5 +1,5 @@
 
-from items import *
+from .items import *
 from copy import deepcopy
 from datetime import datetime
 
@@ -43,5 +43,5 @@ SHOP.add_item(superpoo)
 
 x = SHOP.construct(1)
 x.value *= 0.9
-print(x.data)
+print(SHOP)
 
