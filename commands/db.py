@@ -333,6 +333,8 @@ async def use(ctx, *item):
 	consume, msg = await item.use(ctx=ctx, bot=cassandra, user=u)
 	if consume is True:
 		u.remove_item(item_indexes[0])
+		await ctx.message.channel.send(str(msg))
+		await ctx.message.delete()
 	if consume is False:
 		await ctx.message.channel.send(str(msg))
 		await ctx.message.delete()
