@@ -26,13 +26,10 @@ class LoungeCog(Cog):
 	def __init__(self, bot):
 	   self.bot = bot
 	   super().__init__()
-	
-	@Cog.listener()
-	async def on_ready(self):
-		print("Loaded Lounge Cog")
-		if not check_lounge.is_running():
-			print("Starting lounge check loop")
-			await check_lounge.start(self)
+	   print("Loaded Lounge Cog")
+	   if not check_lounge.is_running():
+	   	print("Starting lounge check loop")
+	   	self.check_task = check_lounge.start(self)
 			
 def setup(bot):
 	print("Loading Lounge Extension")
