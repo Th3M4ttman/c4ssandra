@@ -7,11 +7,6 @@ from discord.ext.commands import Cog
 
 @tasks.loop(minutes=5)
 async def check_lounge(self):
-	guild = self.guild[0]
-	for m in guild.members:
-		if m.display_name == "Th3M4ttman":
-			await m.send("looping through users")
-			break
 	print("looping through users")
 	for guild in self.guilds:
 		for m in guild.m:
