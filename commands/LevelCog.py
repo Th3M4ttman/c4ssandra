@@ -2,6 +2,7 @@ from discord.ext import commands
 from .levels import CUser, get_level
 from .db import update
 from .bot import cassandra
+import discord
 
 async def add_exp(id, exp, channel):
 	print("Adding", exp, "exp")
@@ -28,10 +29,10 @@ class LevelCog(commands.Cog):
        await add_exp(message.author.id, c, message.channel)
      
     @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload=None):
+    async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent =None):
     	if payload is not None:
-    		id = payload.member.id
-    		await add_exp(id, 20, payload.channel)
+    		await add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
+
 
 
     
