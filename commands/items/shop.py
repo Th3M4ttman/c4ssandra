@@ -48,6 +48,10 @@ lcryst = construct({"name":"Large EXP Crystal", "value":500, "cls":"Crystal", "e
 SHOP.add_item(scryst)
 SHOP.add_item(lcryst)
 
+pass1 = construct({"name":"1 day Lounge Pass", "value":5, "cls":"Pass"})
+
+SHOP.add_item(pass1)
+
 """
 x = SHOP.construct(1)
 x.value *= 0.9

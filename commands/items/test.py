@@ -3,6 +3,7 @@ from discord.ext.commands.context import Context
 from discord.ext.commands import Bot
 from humanize import intcomma
 from asyncio import sleep
+import datetime
 	
 
 class Testo(Item):
@@ -31,6 +32,21 @@ class Crystal(Item):
 		me = bot.get_user(user.discord).display_name
 		return True, f"{me} crushes a {self.name} in their hand, gaining {intcomma(exp)} exp"
 
+class LoungePass(Item):
+	@property
+	def length(self):
+		if "length" in self.data.keys():
+			return self.data["length"]
+		return 1
+		
+	async def use(self, ctx:Context, bot:Bot,  user, *args, **kwargs):
+		me = bot.get_user(user.discord).display_name
+		msg = f"{me} activated thier {self.name}"
+		
+		user.stats["expiry"] = (datetime.datetime.now() + datetime.timedelta(days=self.length)).timestamp()
+		user.update()
+		await ctx.channel.send(msg)
 
+define_item("Pass", LoungePass)
 define_item("Crystal", Crystal)
 define_item("Testo", Testo)
