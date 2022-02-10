@@ -8,7 +8,7 @@ class Testo(Item):
 		me = ctx.author.display_name
 		
 		try:
-			user = ctx.message.mentions[0].mention
+			user = ctx.message.mentions[0]
 		except:
 			user = None
 			
