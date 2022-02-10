@@ -27,7 +27,7 @@ class LevelCog(commands.Cog):
 		u = CUser(id)
 		before = get_level(u.exp)
 		after = get_level(u.exp + exp)
-		if before != after and id != self.bot.user.id:
+		if before != after:
 			nl = str(get_level(u.exp + exp))
 			if nl.isnumeric():
 				nl = f"Level {nl}"
@@ -35,10 +35,10 @@ class LevelCog(commands.Cog):
 		
 		
 		u.refresh()
-		if id != self.bot.user.id:
+		if self.bot.get_user(id).display_name != "C4ssandra":
 			print("Before:", u.exp)
 		update(discord=u.discord, exp=u.exp+exp, gbp=u.gbp, _inventory=u.inventory)
-		if id != self.bot.user.id:
+		if self.bot.get_user(id).display_name != "C4ssandra":
 			print("After:", u.exp)
 
 
