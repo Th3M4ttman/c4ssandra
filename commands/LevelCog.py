@@ -20,7 +20,7 @@ class LevelCog(commands.Cog):
 		if payload is not None:
 			await self.add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
 	
-	async def add_exp(self, id, exp, channel, a=False):
+	async def add_exp(self, id, exp, channel, a=True):
 		if a:
 			print("Adding", exp, "exp")
 			print(f"Id: {id}")
@@ -32,7 +32,10 @@ class LevelCog(commands.Cog):
 			if nl.isnumeric():
 				nl = f"Level {nl}"
 			await channel.send(f"Congratulations {cassandra.get_user(u.discord).mention} You Reached {nl}")
-		return u.update(gbp=u.exp + exp)
+		
+		print("Before:", u.gbp)
+		u.update(gbp=u.exp + exp)
+		print("After:", u.gbp)
 
 
 
