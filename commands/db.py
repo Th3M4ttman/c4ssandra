@@ -159,7 +159,9 @@ class CUser():
 		inv = self.inventory
 		inv["inventory"].pop(i)
 		return self.update(inventory=self.inventory)
-	
+		
+	async def add_exp(self, exp, channel, bot):
+		await bot.cogs["LevelCog"].add_exp(exp, channel)
 		
 		
 		

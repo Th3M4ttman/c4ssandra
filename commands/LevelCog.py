@@ -4,24 +4,24 @@ from .bot import cassandra
 import discord
 
 
-    
+	
 
 class LevelCog(commands.Cog):
-    def __init__(self, bot):
-       self.bot = bot
-       super().__init__()
-      
-    @commands.Cog.listener()
-    async def on_message(self, message):
-       c = len(message.content)
-       await self.add_exp(message.author.id, c, message.channel)
-     
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent =None):
-    	if payload is not None:
-    		await self.add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
-    
-    async def add_exp(self, id, exp, channel):
+	def __init__(self, bot):
+	   self.bot = bot
+	   super().__init__()
+	  
+	@commands.Cog.listener()
+	async def on_message(self, message):
+	   c = len(message.content)
+	   await self.add_exp(message.author.id, c, message.channel)
+	 
+	@commands.Cog.listener()
+	async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent =None):
+		if payload is not None:
+			await self.add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
+	
+	async def add_exp(self, id, exp, channel):
 		print("Adding", exp, "exp")
 		u = CUser(id)
 		before = get_level(u.exp)
@@ -36,11 +36,11 @@ class LevelCog(commands.Cog):
 
 
 
-    
+	
 def setup(bot):
-    print("Loading Level Extension")
-    bot.add_cog(LevelCog(bot))
-    
+	print("Loading Level Extension")
+	bot.add_cog(LevelCog(bot))
+	
 try:
 	setup(cassandra)
 except:
