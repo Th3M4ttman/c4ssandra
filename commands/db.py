@@ -15,7 +15,7 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
     "password":PASS}
 
 def update(discord, gbp, exp, _inventory, stats):
-	""" update vendor name based on the vendor id """
+	if stats is None: stats = {}
 	inventory = json.dumps(_inventory)
 	#print("inventory =", inventory)
 	
@@ -23,7 +23,7 @@ def update(discord, gbp, exp, _inventory, stats):
 SET GBP = {gbp},
     EXP = {exp},
 	INVENTORY = '{inventory}',
-	STATS = {stats}
+	STATS = '{stats}'
 WHERE DISCORD = {discord};"""
 	
 	conn = None
