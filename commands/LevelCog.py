@@ -1,6 +1,7 @@
 from discord.ext import commands
-from .commands.levels import CUser, get_level
-from .commands.db import update
+from .levels import CUser, get_level
+from .db import update
+from .bot import cassandra
 
 class LevelCog(commands.Cog):
     def __init__(self, bot):
@@ -26,3 +27,8 @@ class LevelCog(commands.Cog):
 def setup(bot):
     print("Loading Level Extension")
     bot.add_cog(LevelCog(bot))
+    
+try:
+	setup(cassandra)
+except:
+	pass
