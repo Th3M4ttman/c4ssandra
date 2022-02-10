@@ -320,7 +320,7 @@ async def use(ctx, *item):
 		else:
 			item = its[0]
 	
-	msg = item.use()
+	msg = item.use(item, ctx, cassandra)
 	u.remove_item(item_indexes[0])
 	await ctx.message.channel.send(str(msg))
 

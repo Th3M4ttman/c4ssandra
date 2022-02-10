@@ -46,6 +46,6 @@ class Item():
 	def __str__(self):
 		return f"{self.cls}: {self.name} - {self.val_str}"
 		
-	def use(self, *args, **kwargs):
+	async def use(self, ctx:Context, bot:Bot, *args, **kwargs):
 		return f"used {self.name} ✓"
 		
