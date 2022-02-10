@@ -15,8 +15,8 @@ class Testo(Item):
 			
 				
 		if user:
-			return me + " Threw a " + self.name + " at " + user.mention
-		return me + " Threw a " + self.name
+			return True, me + " Threw a " + self.name + " at " + user.mention
+		return True, me + " Threw a " + self.name
 
 class Crystal(Item):
 	async def use(self, ctx:Context, bot:Bot,  user, *args, **kwargs):
