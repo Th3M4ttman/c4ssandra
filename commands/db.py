@@ -136,7 +136,7 @@ class CUser():
 		except Exception as e:
 			print(e)
 			self.exists = False
-		print("user:", self.id, "¥", self.gbp)
+		#print("user:", self.id, "¥", self.gbp)
 		return self
 	
 	def update(self, gbp=None, exp=None, inventory=None):
