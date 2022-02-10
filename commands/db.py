@@ -5,6 +5,7 @@ from .items import construct
 from .items import items as _items
 from copy import copy
 
+
 PASS = os.environ['PASS']
 
 CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
@@ -162,7 +163,7 @@ class CUser():
 		
 		
 		
-import json		
+import json
 class Item():
 	def __init__(self, name = "item", **kwargs):
 		self.name = name

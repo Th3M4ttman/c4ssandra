@@ -24,8 +24,8 @@ class Crystal(Item):
 			exp = self.data["exp"]
 		else:
 			exp = 10
-			
-		await user.add_exp(exp, ctx.channel)
+		
+		await bot.cogs["LevelCog"].add_exp(exp, ctx.channel)
 		print("Added", exp, "Exp")
 		me = bot.get_user(user.discord).display_name
 		return True, f"{me} crushes a {self.name} in their hand, gaining {intcomma(exp)} exp"
