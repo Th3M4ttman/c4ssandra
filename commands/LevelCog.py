@@ -36,11 +36,11 @@ class LevelCog(commands.Cog):
 		
 		
 		
-		if self.bot.get_user(id).display_name != "C4ssandra":
-			print("Before:", u.refresh().exp)
-		update(discord=u.discord, exp=u.exp+exp, gbp=u.gbp, _inventory=u.inventory)
-		if self.bot.get_user(id).display_name != "C4ssandra":
-			print("After:", u.refresh().exp)
+		#if self.bot.get_user(id).display_name != "C4ssandra":
+			#print("Before:", u.refresh().exp)
+		update(discord=u.discord, exp=u.exp+exp, gbp=u.gbp, _inventory=u.inventory, stats=u.stats)
+		#if self.bot.get_user(id).display_name != "C4ssandra":
+			#print("After:", u.refresh().exp)
 
 
 

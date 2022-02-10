@@ -1,6 +1,6 @@
 from copy import deepcopy
 from .bot import cassandra
-from .db import CUser, update
+from .db import CUser
 from humanize import intcomma
 level_range = []
 

@@ -14,7 +14,7 @@ CFG = {"host":"ec2-52-51-155-48.eu-west-1.compute.amazonaws.com",
     "user":"lptycphsmjryri",
     "password":PASS}
 
-def update(discord, gbp, exp, _inventory):
+def update(discord, gbp, exp, _inventory, stats):
 	""" update vendor name based on the vendor id """
 	inventory = json.dumps(_inventory)
 	#print("inventory =", inventory)
@@ -22,7 +22,8 @@ def update(discord, gbp, exp, _inventory):
 	sql = f"""UPDATE accounts
 SET GBP = {gbp},
     EXP = {exp},
-	INVENTORY = '{inventory}'
+	INVENTORY = '{inventory}',
+	STATS = {stats}
 WHERE DISCORD = {discord};"""
 	
 	conn = None
@@ -52,12 +53,13 @@ WHERE DISCORD = {discord};"""
 	return user
 
 
-def add_user(discord, gbp=0, exp=0, _inventory=[]):
+def add_user(discord, gbp=0, exp=0, _inventory=[], stats={}):
 	print("Adding", discord)
 	inventory = """{"inventory":!}""".replace("!", str(_inventory))
-	sql = """INSERT INTO accounts(DISCORD, GBP, EXP, INVENTORY)
-VALUES ({discord}, {gbp}, {exp}, '{inventory}');"""
-	sql = sql.format(discord=discord, gbp=gbp, exp=exp, inventory = inventory)
+	
+	sql = """INSERT INTO accounts(DISCORD, GBP, EXP, INVENTORY, STATS)
+VALUES ({discord}, {gbp}, {exp}, '{inventory}', '{stats}');"""
+	sql = sql.format(discord=discord, gbp=gbp, exp=exp, inventory = inventory, stats = stats)
 	
 	conn = None
 	
@@ -100,7 +102,7 @@ def get_user(discord, create=True):
 			user = None
 		
 		if user == None and create:
-			user = add_user(discord, 0, 0, [])
+			user = add_user(discord, 0, 0, [], {})
 			print("added user", user[0], ":", discord)
 			if conn is not None:
 				conn.close()
@@ -126,12 +128,13 @@ class CUser():
 		self.exp = 0
 		self.gbp = 0
 		self.inventory = []
+		self.stats = {}
 		self.exists = True
 		self.refresh()
 	
 	def refresh(self):
 		try:
-			self.id, _, self.exp, self.gbp, self.inventory = get_user(self.discord)
+			self.id, _, self.exp, self.gbp, self.inventory, stats = get_user(self.discord)
 			self.inventory = json.loads(str(self.inventory).replace("'", '"'))
 		except Exception as e:
 			print(e)
@@ -139,15 +142,17 @@ class CUser():
 		#print("user:", self.id, "¥", self.gbp)
 		return self
 	
-	def update(self, gbp=None, exp=None, inventory=None):
+	def update(self, gbp=None, exp=None, inventory=None, stats=None):
 		if gbp is None:
 			gbp = self.gbp
 		if exp is None:
 			exp = self.exp
 		if inventory is None:
 			inventory = self.inventory
+		if stats is None:
+			stats = self.stats
 			
-		update(self.discord, gbp, exp, inventory)
+		update(self.discord, gbp, exp, inventory, stats)
 		return self.refresh()
 		
 	def add_item(self, item):
@@ -203,7 +208,8 @@ def ensure_table():
 	
 	EXP bigint NOT NULL,
 	GBP bigint NOT NULL,
-	INVENTORY jsonb
+	INVENTORY jsonb,
+	STATS jsonb
 	);"""
 			# connect to the PostgreSQL database
 			conn = psycopg2.connect(**CFG)
@@ -395,8 +401,8 @@ async def givegbp(ctx, recipient:User, n:int, remove=None):
 		await ctx.message.delete()
 		return
 	
-	update(u.discord, (u.gbp-n) if remove else u.gbp, u.exp, u.inventory)
-	update(r.discord, r.gbp+n, r.exp, r.inventory)
+	update(u.discord, (u.gbp-n) if remove else u.gbp, u.exp, u.inventory, u.stats)
+	update(r.discord, r.gbp+n, r.exp, r.inventory, u.stats)
 	
 	await ctx.message.channel.send(f"{ctx.message.author.display_name} gave {recipient.display_name} ¥{humanize.intcomma(n)}")
 	await ctx.message.delete()
@@ -446,7 +452,7 @@ if __name__ == '__main__':
 	#print(CFG)
 	try:
 		print("get user:", get_user(940014428752072765))
-		print("update user:", update(940014428752072765, 69420, 0, [6,7,8]))
+		print("update user:", update(940014428752072765, 69420, 0, [6,7,8], {}))
 	except:
 		pass
 		
