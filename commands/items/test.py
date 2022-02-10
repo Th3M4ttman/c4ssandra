@@ -25,8 +25,6 @@ class Crystal(Item):
 			exp = self.data["exp"]
 		else:
 			exp = 10
-			
-		await sleep(2)
 		
 		await bot.cogs["LevelCog"].add_exp(user.discord, exp, ctx.channel, a=True)
 		#print("Crystal Added", exp, "Exp")

@@ -334,7 +334,7 @@ async def use(ctx, *item):
 			item = its[0]
 			
 	r = await item.use(ctx=ctx, bot=cassandra, user=u)
-	u.update()
+	u.refresh()
 	
 	if r[0] is True:
 		u.remove_item(item_indexes[0])
