@@ -10,7 +10,7 @@ async def check_lounge(self):
 	while True:
 		print("looping through users")
 		for guild in self.guilds:
-			for m in guild.m:
+			for m in guild.members:
 				user = CUser(m.id)
 				if "expiry" in user.stats.keys():
 					expiry = datetime.datetime.fromtimestamp(user.stats["expiry"])
