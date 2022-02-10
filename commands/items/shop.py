@@ -1,5 +1,5 @@
 
-from .items import *
+from items import *
 from copy import deepcopy
 from datetime import datetime
 
@@ -33,8 +33,6 @@ class Shop():
 			out += f"\n\t{i}: {item.name} - {item.val_str}"
 		return out
 
-"""
-
 SHOP = Shop()
 poo = construct({"name":"poo", "value":5, "cls":"Testo"})
 superpoo = construct({"name":"superpoo", "value":50, "cls":"Testo"})
@@ -43,8 +41,7 @@ SHOP.add_item(poo)
 SHOP.add_item(superpoo)
 
 
-x = SHOP.construct(0)
+x = SHOP.construct(1)
+x.value *= 0.9
 print(x.data)
-print(x)
-print(x.use())
-"""
+

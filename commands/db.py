@@ -370,8 +370,13 @@ async def givegbp(ctx, recipient:User, n:int, remove=None):
 	await ctx.message.channel.send(f"{ctx.message.author.display_name} gave {recipient.display_name} ¥{humanize.intcomma(n)}")
 	await ctx.message.delete()
 	
+from .items.shop import SHOP
 
-
+@cassandra.command(name="shop")
+async def shop(ctx, task=None, item=None, num=1):
+	if task is None:
+		await ctx.channel.send(str(SHOP))
+		await ctx.message.delete()
 
 
 if __name__ == '__main__':
