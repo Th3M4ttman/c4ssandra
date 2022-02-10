@@ -2,6 +2,7 @@ from discord.ext import commands
 from .levels import CUser, get_level, update
 from .bot import cassandra
 import discord
+from asyncio import sleep
 
 
 
@@ -13,11 +14,13 @@ class LevelCog(commands.Cog):
 	@commands.Cog.listener()
 	async def on_message(self, message):
 	   c = len(message.content)
+	   await sleep(2)
 	   await self.add_exp(message.author.id, c, message.channel)
 	 
 	@commands.Cog.listener()
 	async def on_raw_reaction_add(self, payload:discord.RawReactionActionEvent =None):
 		if payload is not None:
+			await sleep(2)
 			await self.add_exp(payload.user_id, 20, cassandra.get_channel(payload.channel_id))
 	
 	async def add_exp(self, id, exp, channel, a=True):

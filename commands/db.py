@@ -135,7 +135,7 @@ class CUser():
 	
 	def refresh(self):
 		try:
-			self.id, _, self.exp, self.gbp, self.inventory, stats = get_user(self.discord)
+			self.id, _, self.exp, self.gbp, self.inventory, self.stats = get_user(self.discord)
 			self.inventory = json.loads(str(self.inventory).replace("'", '"'))
 		except Exception as e:
 			print(e)
@@ -153,7 +153,7 @@ class CUser():
 		if stats is None:
 			stats = self.stats
 			
-		update(self.discord, gbp, exp, inventory, stats)
+		update(self.discord, gbp=gbp, exp=exp, _inventory=inventory, stats=stats)
 		return self.refresh()
 		
 	def add_item(self, item):
