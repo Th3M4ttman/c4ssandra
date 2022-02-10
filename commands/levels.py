@@ -49,7 +49,10 @@ def level_str(exp):
 async def lvl(ctx):
 	u = CUser(ctx.message.author.id)
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: {level_str(u.exp)}")
-	await ctx.message.delete()
+	try:
+		await ctx.message.delete()
+	except:
+		pass
 	
 from discord.ext import commands
 
