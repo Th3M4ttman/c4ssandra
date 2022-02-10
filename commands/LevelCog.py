@@ -3,7 +3,7 @@ from .levels import CUser, get_level
 from .db import update
 from .bot import cassandra
 
-async def add_exp(id, exp, ctx):
+async def add_exp(id, exp, channel):
 	print("Adding", exp, "exp")
 	u = CUser(id)
 	before = get_level(u.exp)
@@ -13,7 +13,7 @@ async def add_exp(id, exp, ctx):
 		nl = str(get_level(u.exp))
 		if nl.isnumeric():
 			nl = f"Level {nl}"
-		await ctx.channel.send(f"Congratulations {cassandra.get_user(u.discord).mention} You Reached {nl}")
+		await channel.send(f"Congratulations {cassandra.get_user(u.discord).mention} You Reached {nl}")
 	return u
     
 
@@ -25,12 +25,15 @@ class LevelCog(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
        c = len(message.content)
-       await add_exp(message.author.id, c, message)
+       await add_exp(message.author.id, c, message.channel)
      
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, user):
-    	await add_exp(user.id, 20, reaction)
-    
+    async def on_raw_eaction_add(self, payload=None):
+    	if payload is not None:
+    		id = payload.member.id
+    		await add_exp(id, 20, payload.channel)
+
+
     
 def setup(bot):
     print("Loading Level Extension")
