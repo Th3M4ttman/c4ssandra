@@ -7,8 +7,9 @@ from discord.ext.commands import Cog
 import discord
 
 async def check_lounge(self):
+	await sleep(20)
 	while True:
-		print("looping through users")
+		print("Running lounge membership check...")
 		for guild in self.guilds:
 			lounge_role = discord.utils.get(guild.roles, name = "lounge")
 			for m in guild.members:
@@ -25,15 +26,15 @@ async def check_lounge(self):
 					try:
 						await m.add_roles(lounge_role)
 						print("Added lounge role to", name, datetime.datetime.now() - expiry)
-					except:
-						pass
+					except Exception as e:
+						print(e)
 					
 				else:
 					try:
 						await m.remove_roles(lounge_role)
 						print("Removed lounge role from", name)
-					except:
-						pass
+					except Exception as e:
+						print(e)
 					
 		await sleep(60)
 			
