@@ -446,14 +446,14 @@ async def shop(ctx, task:str =None, item:str =None, num:int=1):
 
 import datetime
 @cassandra.command(name="lounge")
-async def lounge(ctx, reset = False):
+async def lounge(ctx, reset:str = False):
 	u = CUser(ctx.author.id)
 	if reset != False:
 		u.stats["expiry"] = datetime.datetime.now().timestamp()
 		u.update()
 	expiry = datetime.datetime.fromtimestamp(u.stats["expiry"])
-	remain = expiry - datetime.datetime.now()
-	msg = f"{ctx.author.display_name} Lounge Membership:\nExpires: {expiry}\nRemaining: {remain}"
+	remain = str(expiry - datetime.datetime.now()).split(".")[0]
+	msg = f"{ctx.author.display_name} Lounge Membership:\nExpires: {str(expiry).split('.')[0]}\nRemaining: {remain}"
 	await ctx.channel.send(msg)
 	
 	try:

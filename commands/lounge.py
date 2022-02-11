@@ -9,7 +9,7 @@ import discord
 async def check_lounge(self):
 	await sleep(20)
 	while True:
-		print("Running lounge membership check...")
+		#print("Running lounge membership check...")
 		for guild in self.guilds:
 			lounge_role = discord.utils.get(guild.roles, name = "lounge")
 			for m in guild.members:
@@ -36,7 +36,7 @@ async def check_lounge(self):
 					if lounge_role not in m.roles:
 						try:
 							await m.add_roles(lounge_role)
-							print("Added lounge role to", name, datetime.datetime.now() - expiry)
+							print("Added lounge role to", expiry - name, datetime.datetime.now())
 							
 						except Exception as e:
 							print(e)
