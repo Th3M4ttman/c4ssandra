@@ -14,6 +14,8 @@ async def check_lounge(self):
 			lounge_role = discord.utils.get(guild.roles, name = "lounge")
 			for m in guild.members:
 				user = CUser(m.id)
+				if user is None:
+					continue
 				if user.stats is None:
 					user.update(stats={})
 				if "expiry" in user.stats.keys():
@@ -23,18 +25,21 @@ async def check_lounge(self):
 					
 				name = m.display_name
 				if expiry <= datetime.datetime.now():
-					try:
-						await m.add_roles(lounge_role)
-						print("Added lounge role to", name, datetime.datetime.now() - expiry)
-					except Exception as e:
-						print(e)
+					if lounge_role in m.roles:
+						try:
+							await m.remove_roles(lounge_role)
+							print("Removed lounge role from", name)
+						except Exception as e:
+							print(e)
 					
 				else:
-					try:
-						await m.remove_roles(lounge_role)
-						print("Removed lounge role from", name)
-					except Exception as e:
-						print(e)
+					if lounge_role not in m.roles:
+						try:
+							await m.add_roles(lounge_role)
+							print("Added lounge role to", name, datetime.datetime.now() - expiry)
+							
+						except Exception as e:
+							print(e)
 					
 		await sleep(60)
 			
