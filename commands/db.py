@@ -475,7 +475,9 @@ async def medal(ctx):
 	item = construct({"name":name, "value":1000, "cls":"Award", "reason": reason, "awarded":datetime.datetime.now().timestamp(), "recipient":recipient.display_name})
 	u = CUser(recipient.id)
 	u.add_item(item)
-	msg = f"{recipient.name} was awarded a: {item.name}\n{await item.use(ctx=ctx, bot=cassandra, user=u)[1]}"
+	desc = await item.use(ctx=ctx, bot=cassandra, user=u)
+	desc = desc[1]
+	msg = f"{recipient.name} was awarded a: {item.name}\n{desc}"
 	await ctx.message.channel.send(msg)
 	await ctx.message.delete()
 	
