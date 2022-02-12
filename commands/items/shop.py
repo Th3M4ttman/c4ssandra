@@ -4,13 +4,25 @@ from copy import deepcopy
 from datetime import datetime
 
 class Shop():
-	def __init__(self, items=[]):
+	def __init__(self, items=[], special=[]):
 		self.items = items
+		self.special = special
 		
 	def add_item(self, item):
 		self.items.append(item)
 		
+	def add_special(self, item):
+		self.special.append(item)
+		
 	def get(self, item):
+		if type(item) == int:
+			return self.items[item]
+		elif type(item) == str:
+			for i in self.items:
+				if i.name.lower() == item.lower():
+					return i
+					
+	def getspecial(self, item):
 		if type(item) == int:
 			return self.items[item]
 		elif type(item) == str:
@@ -20,7 +32,12 @@ class Shop():
 	
 	def construct(self, item):
 		if not self.get(item):
-			return
+			if not self.getspecial(item):
+				return
+			else:
+				out = deepcopy(self.getspecial(item))
+				out.data["created"] = str(datetime.now())
+				return out
 		
 		out = deepcopy(self.get(item))
 		out.data["created"] = str(datetime.now())
