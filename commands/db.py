@@ -470,7 +470,7 @@ async def medal(ctx):
 		if "@" not in part:
 			parts.append(part)
 	cont = " ".join(parts)
-	recipient = ctx.message.mentions[0].user
+	recipient = cassandra.get_user(ctx.message.raw_mentions[0])
 	name, reason = cont.split("/")
 	item = construct({"name":name, "value":1000, "cls":"Award", "reason": reason, "awarded":str(datetime.datetime.now.timestamp()), "recipient":recipient.display_name})
 	u = CUser(recipient.id)
