@@ -469,13 +469,13 @@ async def medal(ctx):
 	for part in cont:
 		if "@" not in part:
 			parts.append(part)
-	cont = " ".join(parts)
+	cont = " ".join(parts[1:])
 	recipient = cassandra.get_user(ctx.message.raw_mentions[0])
 	name, reason = cont.split("/")
 	item = construct({"name":name, "value":1000, "cls":"Award", "reason": reason, "awarded":datetime.datetime.now().timestamp(), "recipient":recipient.display_name})
 	u = CUser(recipient.id)
 	u.add_item(item)
-	msg = f"{recipient.name} was awarded a {item.name}\n{await item.use(ctx=ctx, bot=cassandra, user=u)}"
+	msg = f"{recipient.name} was awarded a: {item.name}\n{await item.use(ctx=ctx, bot=cassandra, user=u)[1]}"
 	await ctx.message.channel.send(msg)
 	await ctx.message.delete()
 	
