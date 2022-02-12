@@ -50,4 +50,7 @@ class Item():
 		
 	async def use(self, ctx:Context, bot:Bot, user, *args, **kwargs):
 		return True, f"used {self.name} ✓"
+	
+	def to_json(self):
+		return self.data
 		
