@@ -41,7 +41,7 @@ class LoungePass(Item):
 		
 	async def use(self, ctx:Context, bot:Bot,  user, *args, **kwargs):
 		me = bot.get_user(user.discord).display_name
-		msg = f"{me} activated thier {self.name}"
+		msg = f"{me} activated their {self.name}"
 		
 		user.stats["expiry"] = (datetime.datetime.now() + datetime.timedelta(days=self.length)).timestamp()
 		user.update()
