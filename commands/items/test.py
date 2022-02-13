@@ -46,7 +46,7 @@ class LoungePass(Item):
 		user.stats["expiry"] = (datetime.datetime.now() + datetime.timedelta(days=self.length)).timestamp()
 		user.update()
 		#await ctx.channel.send(msg)
-		return False, msg
+		return True, msg
 
 define_item("Pass", LoungePass)
 define_item("Crystal", Crystal)
