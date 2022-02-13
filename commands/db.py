@@ -454,6 +454,24 @@ async def shop(ctx, task:str =None, item:str =None, num:int=1):
 			await ctx.message.delete()
 		except:
 			pass
+			
+	elif task.lower() == "sell" and item:
+		u = CUser(ctx.message.author.id)
+		if item.isnumeric():
+			i = int(item)
+			item = construct(u.inventory[i])
+			name = item.name
+			val = item.value
+			vs = item.val_str
+			u.remove_item(i)
+			u.add_gbp(val)
+			me = ctx.message.author.display_name
+			msg = f"{me} sold their {name} for {vs}\nBalance: ¥{humanize.intcomma(u.gbp)}"
+			await ctx.message.channel.send(msg)
+			try:
+				await ctx.message.delete()
+			except:
+				pass
 
 import datetime
 @cassandra.command(name="lounge")
