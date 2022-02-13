@@ -4,6 +4,7 @@ from discord.ext.commands import Bot
 from humanize import intcomma
 from asyncio import sleep
 import datetime
+import discord
 	
 
 class Testo(Item):
@@ -43,9 +44,21 @@ class LoungePass(Item):
 		me = bot.get_user(user.discord).display_name
 		msg = f"{me} activated their {self.name}"
 		
-		user.stats["expiry"] = (datetime.datetime.now() + datetime.timedelta(days=self.length)).timestamp()
+		if "expiry" in user.stats.keys():
+			e = datetime.datetime.fromtimestamp(user.stats["expiry"])
+			if datetime.datetime.now() < e:
+				user.stats["expiry"] = (e + datetime.timedelta(days=self.length)).timestamp()
+				msg += " extending their membership"
+			else:
+				user.stats["expiry"] = (datetime.datetime.now() + datetime.timedelta(days=self.length)).timestamp()
+		else:
+			user.stats["expiry"] = (datetime.datetime.now() + datetime.timedelta(days=self.length)).timestamp()
 		user.update()
-		#await ctx.channel.send(msg)
+		lounge_role = discord.utils.get(ctx.guild.roles, name = "lounge")
+		
+		for m in ctx.guild.members:
+			if m.id == user.discord:
+				m.add_roles(lounge_role)
 		return True, msg
 
 define_item("Pass", LoungePass)
