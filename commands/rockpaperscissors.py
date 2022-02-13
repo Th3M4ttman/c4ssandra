@@ -196,6 +196,23 @@ async def rps(message, wager:int = 0):
 	
 			
 		
+@cassandra.command(name="rpsstats")
+async def rpsstats(ctx):
+	u = CUser(ctx.message.author.id)
+	w = u.get_stat("rps_wins")
+	if w is None:
+		u.set_stat("rps_wins", 0)
+		w = 0
+	l = u.get_stat("rps_losses")
+	if l is None: 
+		u.set_stat("rps_losses", 0)
+		l = 0
+	d = u.get_stat("rps_draws")
+	if d is None:
+		d = 0
+		u.set_stat("rps_draws", 0)
 	
+	msg = f"{ctx.message.author.display_name}: Wins: {w} / Draws: {d} / Losses: {l}"
+	await ctx.message.channel.send(msg)
 			
 	
