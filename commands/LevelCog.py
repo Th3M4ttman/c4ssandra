@@ -46,27 +46,35 @@ class LevelCog(commands.Cog):
 		#if self.bot.get_user(id).display_name != "C4ssandra":
 			#print("After:", u.refresh().exp)
 
+import datetime
 
 async def wages(bot):
 	await sleep(20)
 	while True:
-		msg = "Daily wages:\n"
+		msg = "Daily wages:"
 		done = []
 		for guild in bot.guilds:
 			for m in guild.members:
 				if m.id not in done:
 					u = CUser(m.id)
+					if u.get_stat("last_wage") is not None:
+						try:
+							if datetime.datetime.now() - datetime.datetime.fromtimestamp(u.get_stat("last_wage")) < datetime.timedelta(hours=24):
+								continue
+						except Exception as e:
+							print(e)
 					wage = 100
 					add = 50
 					for _ in range(0, get_level(u.exp)):
 						wage += add
 					
 					u.add_gbp(wage)
+					u.set_stat("last_wage", datetime.datetime.now().timestamp())
 					done.append(u.discord)
 					msg += f"\n\t{m.display_name}: ¥{intcomma(wage)}"
 		
 		await bs_say(msg)
-		day = (60 * 60) * 24
+		day = (60 * 60) * 12
 		await sleep(day)
 					
 	

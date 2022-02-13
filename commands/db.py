@@ -169,7 +169,8 @@ class CUser():
 		return self.update()
 	
 	def get_stat(self, stat):
-		return self.stats[stat]
+		if stat in self.stats.keys():
+			return self.stats[stat]
 		
 	def remove_item(self, i):
 		inv = self.inventory
