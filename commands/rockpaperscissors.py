@@ -214,5 +214,9 @@ async def rpsstats(ctx):
 	
 	msg = f"{ctx.message.author.display_name}: Wins: {w} / Draws: {d} / Losses: {l}"
 	await ctx.message.channel.send(msg)
+	try:
+		await bs(ctx)
+	except:
+			pass
 			
 	
