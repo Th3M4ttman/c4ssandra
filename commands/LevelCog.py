@@ -72,8 +72,10 @@ async def wages(bot):
 					u.set_stat("last_wage", datetime.datetime.now().timestamp())
 					done.append(u.discord)
 					msg += f"\n\t{m.display_name}: ¥{intcomma(wage)}"
-		
-		await bs_say(msg)
+		if len(done) > 0:
+			await bs_say(msg)
+		else:
+			print("Already Done Wages Today")
 		day = (60 * 60) * 12
 		await sleep(day)
 					
