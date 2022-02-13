@@ -60,14 +60,18 @@ SHOP.add_item(superpoo)
 
 scryst = construct({"name":"Small EXP Crystal", "value":50, "cls":"Crystal", "exp":100})
 lcryst = construct({"name":"Large EXP Crystal", "value":500, "cls":"Crystal", "exp":1000})
-
+hcryst = construct({"name":"Huge EXP Crystal", "value":4000, "cls":"Crystal", "exp":10000})
 
 SHOP.add_item(scryst)
 SHOP.add_item(lcryst)
-
-pass1 = construct({"name":"1 day Lounge Pass", "value":5, "cls":"Pass"})
+SHOP.add_item(hcryst)
+pass1 = construct({"name":"1 day Lounge Pass", "value":200, "cls":"Pass", "length":1})
+pass7 = construct({"name":"7 day Lounge Pass", "value":1000, "cls":"Pass", "length":7})
+pass30 = construct({"name":"30 day Lounge Pass", "value":1500, "cls":"Pass", "length":30})
 
 SHOP.add_item(pass1)
+SHOP.add_item(pass7)
+SHOP.add_item(pass30)
 
 """
 x = SHOP.construct(1)
