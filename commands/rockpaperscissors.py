@@ -172,7 +172,24 @@ async def rps(message, wager:int = 0):
 			u.update(gbp=u.gbp + wager)
 			msg += "\n" + cassandra.get_user(winner).display_name + f": ¥{intcomma(u.gbp)}"
 			
-	
+	if winner is not None:
+		u = CUser(winner)
+		wins = u.get_stat("rps_wins")
+		if wins is None: wins = 0
+		u.set_stat("rps_wins", wins+1)
+		u = CUser(loser)
+		losses = u.get_stat("rps_losses")
+		if losses is None: losses = 0
+		u.set_stat("rps_losses", losses+1)
+	else:
+		u = CUser(player1.id)
+		ties = u.get_stat("rps_ties")
+		if ties is None: ties = 0
+		u.set_stat("rps_ties", ties+1)
+		u = CUser(player2.id)
+		ties = u.get_stat("rps_ties")
+		if ties is None: ties = 0
+		u.set_stat("rps_ties", ties+1)
 	
 	await announce.delete()
 	await message.channel.send(msg)
