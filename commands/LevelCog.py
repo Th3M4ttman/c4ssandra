@@ -1,8 +1,9 @@
 from discord.ext import commands
 from .levels import CUser, get_level, update
-from .bot import cassandra
+from .bot import cassandra, bs_say
 import discord
 from asyncio import sleep
+from humanize import intcomma
 
 
 
@@ -46,11 +47,33 @@ class LevelCog(commands.Cog):
 			#print("After:", u.refresh().exp)
 
 
-
+async def wages(bot):
+	await sleep(20)
+	while True:
+		msg = "Daily wages:\n"
+		done = []
+		for guild in bot.guilds:
+			for m in guild.members:
+				if m.id not in done:
+					u = CUser(m.id)
+					wage = 100
+					add = 50
+					for _ in range(0, get_level(u.exp)):
+						wage += add
+					
+					u.add_gbp(wage)
+					done.append(u.discord)
+					msg += f"{m.display_name}: ¥{intcomma(wage)}"
+		
+		await bs_say(msg)
+		day = (60 * 60) * 24
+		await sleep(day)
+					
 	
 def setup(bot):
 	print("Loading Level Extension")
 	bot.add_cog(LevelCog(bot))
+	bot.loop.create_task(wages(bot))
 	
 try:
 	setup(cassandra)

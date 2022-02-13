@@ -74,5 +74,16 @@ async def bs(ctx:discord.ext.commands.Context):
 		if str(ch) == "bot_spam":
 			return await ch.send(content=content)
 	
-
+async def bs_say(msg):
+	channels = cassandra.get_all_channels()
+	msgs = []
+	for ch in channels:
+		if str(ch) == "bot_spam":
+			m = await ch.send(content=msg)
+			msgs.append(m)
+			
+	if len(msgs) == 1:
+		return msgs[0]
+	return msgs
+			
 

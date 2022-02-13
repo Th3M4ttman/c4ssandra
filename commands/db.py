@@ -160,6 +160,16 @@ class CUser():
 		inv = self.inventory
 		inv["inventory"].append(item.to_json())
 		return self.update(inventory=self.inventory)
+	
+	def add_gbp(self, gbp):
+		return self.update(gbp=self.gbp +gbp)
+	
+	def set_stat(self, stat, value):
+		self.stats[stat] = value
+		return self.update()
+	
+	def get_stat(self, stat):
+		return self.stats[stat]
 		
 	def remove_item(self, i):
 		inv = self.inventory
