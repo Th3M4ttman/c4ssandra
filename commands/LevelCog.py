@@ -63,7 +63,7 @@ async def wages(bot):
 					
 					u.add_gbp(wage)
 					done.append(u.discord)
-					msg += f"{m.display_name}: ¥{intcomma(wage)}"
+					msg += f"\n\t{m.display_name}: ¥{intcomma(wage)}"
 		
 		await bs_say(msg)
 		day = (60 * 60) * 24
