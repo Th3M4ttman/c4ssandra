@@ -459,7 +459,7 @@ async def shop(ctx, task:str =None, item:str =None, num:int=1):
 		u = CUser(ctx.message.author.id)
 		if item.isnumeric():
 			i = int(item)
-			item = construct(u.inventory[i])
+			item = construct(u.inventory["inventory"][i])
 			name = item.name
 			val = item.value
 			vs = item.val_str
