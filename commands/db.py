@@ -4,6 +4,7 @@ import humanize
 from .items import construct
 from .items import items as _items
 from copy import copy
+from .utils import choice
 
 
 PASS = os.environ['PASS']
@@ -510,9 +511,13 @@ async def medal(ctx):
 	await ctx.message.channel.send(msg)
 	await ctx.message.delete()
 	
+
 	
-	
-	
+@cassandra.command(name="choicetest")
+async def choicetest(ctx):
+	c = await choice("Choice Test", ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), ctx, cassandra)
+	await ctx.message.delete()
+	await ctx.channel.send(f"Chose {c}")
 
 
 if __name__ == '__main__':
