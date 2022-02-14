@@ -77,7 +77,7 @@ class Choices():
 				await msg.add_reaction("🔃")
 				avail.append("🔃")
 			await msg.add_reaction("🇽")
-			
+			avail.append("🇽")
 			def check(reaction, user):
 				return user.id == ctx.author.id and reaction.emoji in avail
 			
