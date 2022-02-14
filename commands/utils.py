@@ -80,7 +80,8 @@ class Choices():
 				c = nums.index(str(reaction)) + 1
 				await msg.delete()
 				return self.get_choice(page, c)
-			except:
+			except Exception as e:
+				print(type(e), e)
 				if str(reaction) == "🔃":
 					page += 1
 				if page > len(self.pages):
