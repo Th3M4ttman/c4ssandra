@@ -38,7 +38,7 @@ class Choices():
 			if p + 1 > len(self.pages):
 				p = 0
 			out += f"\n\t{nextpage} - Page {p+1}"
-		out += f"\n\t🔚 - Cancel"
+		out += f"\n\t🇽 - Cancel"
 		return out
 	
 	def get_choice(self, page, item):
@@ -46,7 +46,7 @@ class Choices():
 		
 	async def send(self, ctx:Context, bot:Bot, timeout=60*5):
 		made = False
-		nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟", "🔃", "🔚"]
+		nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟", "🔃", "🇽"]
 		msg = None
 		page = 0
 		
@@ -76,7 +76,7 @@ class Choices():
 			if len(self.pages) > 1:
 				await msg.add_reaction("🔃")
 				avail.append("🔃")
-			await msg.add_reaction("🔚")
+			await msg.add_reaction("🇽")
 			
 			def check(reaction, user):
 				return user.id == ctx.author.id and reaction.emoji in avail
@@ -96,7 +96,7 @@ class Choices():
 			
 				
 			try:
-				if str(reaction) == "🔚":
+				if str(reaction) == "🇽":
 					await msg.delete()
 					return
 				c = nums.index(str(reaction)) + 1
@@ -105,7 +105,7 @@ class Choices():
 			except:
 				if str(reaction) == "🔃":
 					page += 1
-				elif str(reaction) == "🔚":
+				elif str(reaction) == "🇽":
 					try:
 						await msg.delete()
 					except:
