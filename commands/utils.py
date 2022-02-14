@@ -60,8 +60,11 @@ class Choices():
 			prompt = self.prompt + ":"
 			
 			msg = await ctx.channel.send(prompt + self.page(page))
+			for m in ctx.guild.members:
+				if m.id == bot.user.id:
+					break
 			for num in nums:
-				msg.remove_reaction(num)
+				msg.remove_reaction(num, m)
 				
 			for i, choice in enumerate(self.pages[page]):
 				await msg.add_reaction(nums[i])
