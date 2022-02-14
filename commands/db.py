@@ -133,6 +133,12 @@ class CUser():
 		self.stats = {}
 		self.exists = True
 		self.refresh()
+		
+	def cinventory(self):
+		out = []
+		for item in self.inventory:
+			out.append(construct(item))
+		return out
 	
 	def refresh(self):
 		try:
@@ -515,7 +521,8 @@ async def medal(ctx):
 	
 @cassandra.command(name="choicetest")
 async def choicetest(ctx):
-	c = Choices("Choice Test", ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"))
+	u = CUser(ctx.author.id)
+	c = Choices("Choice Test", u.cinventory())
 	c = await c.send(ctx, cassandra)
 	if c:
 		await ctx.channel.send(f"Chose {c}")
