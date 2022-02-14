@@ -70,6 +70,8 @@ class Choices():
 							pass
 			for i, choice in enumerate(self.pages[page]):
 				await msg.add_reaction(nums[i])
+			if len(self.pages) > 1:
+				await msg.add_reaction("🔃")
 			
 			
 			def check(reaction, user):
@@ -80,10 +82,12 @@ class Choices():
 			else:
 				reaction, user = await bot.wait_for('reaction_add', check=check)
 				
-			c = nums.index(str(reaction)) + 1
-			await msg.delete()
-			return self.get_choice(page, c)
-		
+			try:
+				c = nums.index(str(reaction)) + 1
+				await msg.delete()
+				return self.get_choice(page, c)
+			except:
+				continue
 			
 		
 
