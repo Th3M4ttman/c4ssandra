@@ -25,7 +25,7 @@ class Choices():
 				
 	def page(self, _page):
 		nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟"]
-		nextpage = "⬇️"
+		nextpage = "🔃"
 		page = self.pages[_page]
 		out = f"{self.prompt}"
 		if len(self.pages) >1:
@@ -44,7 +44,7 @@ class Choices():
 		
 	async def send(self, ctx:Context, bot:Bot, timeout=0):
 		made = False
-		nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟", "⬇️"]
+		nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟", "🔃"]
 		msg = None
 		page = 0
 		while not made:
@@ -65,12 +65,13 @@ class Choices():
 				for guild in bot.guilds:
 					for m in guild.members:
 						try:
-							msg.remove_reaction(num, m)
+							await msg.remove_reaction(num, m)
 						except:
 							pass
 			for i, choice in enumerate(self.pages[page]):
 				await msg.add_reaction(nums[i])
-				
+			
+			
 			def check(reaction, user):
 				return user.id == ctx.author.id and reaction.emoji in nums
 				
