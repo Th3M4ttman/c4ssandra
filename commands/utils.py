@@ -62,7 +62,7 @@ class Choices():
 			msg = await ctx.channel.send(prompt + self.page(page))
 			
 			for num in nums:
-				for m in ctx.guild.members:
+				for m in ctx.message.guild.members:
 					try:
 						msg.remove_reaction(num, m)
 					except:
