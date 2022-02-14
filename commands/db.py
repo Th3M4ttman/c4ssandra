@@ -517,7 +517,10 @@ async def medal(ctx):
 async def choicetest(ctx):
 	c = Choices("Choice Test", ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"))
 	c = await c.send(ctx, cassandra)
-	await ctx.message.delete()
+	try:
+		await ctx.message.delete()
+	except:
+		pass
 	await ctx.channel.send(f"Chose {c}")
 
 
