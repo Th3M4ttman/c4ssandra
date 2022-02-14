@@ -79,7 +79,7 @@ class Choices():
 			try:
 				c = nums.index(str(reaction)) + 1
 				await msg.delete()
-				return self.get_choice(page, c)
+				return self.get_choice(page, c-1)
 			except Exception as e:
 				print(type(e), e)
 				if str(reaction) == "🔃":
