@@ -42,11 +42,17 @@ class Choices():
 	def get_choice(self, page, item):
 		return self.pages[page][item]
 		
-	async def send(self, ctx:Context, bot:Bot, timeout=0):
+	async def send(self, ctx:Context, bot:Bot, timeout=60*5):
 		made = False
 		nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟", "🔃"]
 		msg = None
 		page = 0
+		
+		try:
+			await ctx.message.delete()
+		except:
+			pass
+		
 		while not made:
 			if msg is not None:
 				try:
@@ -71,18 +77,25 @@ class Choices():
 			
 			def check(reaction, user):
 				return user.id == ctx.author.id and reaction.emoji in avail
+			
+			try:
+				if timeout:
+					reaction, user = await bot.wait_for('reaction_add', timeout=timeout, check=check)
+				else:
+					reaction, user = await bot.wait_for('reaction_add', check=check)
+			except:
+				try:
+					await msg.delete()
+					return
+				except:
+					return
 				
-			if timeout:
-				reaction, user = await bot.wait_for('reaction_add', timeout=timeout, check=check)
-			else:
-				reaction, user = await bot.wait_for('reaction_add', check=check)
 				
 			try:
 				c = nums.index(str(reaction)) + 1
 				await msg.delete()
 				return self.get_choice(page, c-1)
-			except Exception as e:
-				print(type(e), e)
+			except:
 				if str(reaction) == "🔃":
 					page += 1
 				if page > len(self.pages):
