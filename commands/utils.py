@@ -87,7 +87,10 @@ class Choices():
 				await msg.delete()
 				return self.get_choice(page, c)
 			except:
-				continue
+				if str(reaction) == "🔃":
+					page += 1
+				if page > len(self.pages):
+					page = 0
 			
 		
 
