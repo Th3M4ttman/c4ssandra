@@ -61,15 +61,16 @@ class Choices():
 			
 			msg = await ctx.channel.send(prompt + self.page(page))
 			
-			
+			avail = []
 			for i, choice in enumerate(self.pages[page]):
 				await msg.add_reaction(nums[i])
+				avail.append(nums[i])
 			if len(self.pages) > 1:
 				await msg.add_reaction("🔃")
-			
+				avail.append("🔃")
 			
 			def check(reaction, user):
-				return user.id == ctx.author.id and reaction.emoji in nums
+				return user.id == ctx.author.id and reaction.emoji in avail
 				
 			if timeout:
 				reaction, user = await bot.wait_for('reaction_add', timeout=timeout, check=check)
