@@ -517,7 +517,8 @@ async def medal(ctx):
 async def choicetest(ctx):
 	c = Choices("Choice Test", ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"))
 	c = await c.send(ctx, cassandra)
-	await ctx.channel.send(f"Chose {c}")
+	if c:
+		await ctx.channel.send(f"Chose {c}")
 
 
 if __name__ == '__main__':
