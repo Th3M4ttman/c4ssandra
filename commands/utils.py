@@ -60,12 +60,13 @@ class Choices():
 			prompt = self.prompt + ":"
 			
 			msg = await ctx.channel.send(prompt + self.page(page))
-			for m in ctx.guild.members:
-				if m.id == bot.user.id:
-					break
+			
 			for num in nums:
-				msg.remove_reaction(num, m)
-				
+				for m in ctx.guild.members:
+					try:
+						msg.remove_reaction(num, m)
+					except:
+						pass
 			for i, choice in enumerate(self.pages[page]):
 				await msg.add_reaction(nums[i])
 				
@@ -83,12 +84,7 @@ class Choices():
 		
 			
 		
-			
-x=Choices("Pick 1", [1,2,3,4,5,6,7,8,9,10, 11])
-			
-#print(x.page(0))
-print(x.send(None, None))
-			
+
 
 async def choice(prompt, choices, ctx:Context, bot:Bot, timeout=0):
 	nums = ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣", "🔟"]
