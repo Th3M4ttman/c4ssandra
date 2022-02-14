@@ -136,7 +136,7 @@ class CUser():
 		
 	def cinventory(self):
 		out = []
-		for item in self.inventory:
+		for item in self.inventory["inventory"]:
 			out.append(construct(item))
 		return out
 	
