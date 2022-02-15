@@ -131,7 +131,7 @@ class Roulette():
 	def __str__(self):
 		if self.number is not None:
 			return f"\n{self.colour} {self.number}\n"
-		return "Place your bets\n35:1 0 - 36 / green\n 1:1 red/black\n 1:1 high/low\n 1:1 odds/evens\n 2:1 third1/third2/third3 \n 2:1 row1/row2/row3\n\n(bet) (amount)\ne.g third1 50"
+		return "Place your bets\n35:1 green / 0 - 36\n 1:1 red/black\n 1:1 high/low\n 1:1 odds/evens\n 2:1 third1/third2/third3 \n 2:1 row1/row2/row3\n\n(bet) (amount)\ne.g third1 50"
 
 import discord
 from .bot import cassandra
@@ -152,10 +152,13 @@ async def roulette(ctx):
 			u = CUser(msg.author.id)
 			c = msg.content
 			b = Bet(c, u)
+			if b.bet is None:
+				continue
 			wheel.add_bet(b)
-		except:
-			continue
+		except Exception as e:
+			print(e)
 	await board.edit(content="No More Bets!\nSpinning...")
 	await sleep(5)
+	wheel.spin()
 	await board.edit(content=str(board.number))
 
