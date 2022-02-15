@@ -7,6 +7,7 @@ from . import rockpaperscissors
 from . import db
 from . import levels
 from . import lounge
+from . import roulettegame
 import datetime
 
 
