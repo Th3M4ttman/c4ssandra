@@ -164,5 +164,11 @@ async def roulette(ctx):
 	await board.edit(content="No More Bets!\nSpinning...")
 	await sleep(6)
 	wheel.spin()
-	await board.edit(content=str(wheel.number))
+	out = str(wheel.number)
+	for bet in wheel.bets:
+		if bet.bet:
+			out += f"\n<@{bet.user.id}>: {bet.bet} ¥{intcomma(bet.paid)}"
+	await board.edit(content=out)
+	
+			
 
