@@ -142,3 +142,14 @@ async def choice(prompt, choices, ctx:Context, bot:Bot, timeout=0):
 	await msg.delete()
 	return nums.index(reaction.emoji) + 1
 
+async def trydelete(ctx):
+	try:
+		await ctx.message.delete()
+		return True
+	except:
+		try:
+			await ctx.delete()
+			return True
+		except:
+			return False
+	

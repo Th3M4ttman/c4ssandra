@@ -135,10 +135,11 @@ class Roulette():
 
 import discord
 from .bot import cassandra
+from .utils import trydelete
 
 @cassandra.command(name="roulette")
 async def roulette(ctx):
-	await ctx.message.delete()
+	await trydelete(ctx)
 	wheel = Roulette()
 	board = await ctx.channel.send(str(wheel))
 	def check(message):
