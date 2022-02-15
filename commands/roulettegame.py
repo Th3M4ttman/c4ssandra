@@ -147,7 +147,11 @@ async def roulette(ctx):
 	
 	stop = datetime.datetime.now() + datetime.timedelta(minutes=1)
 	while datetime.datetime.now() <= stop:
-		msg = await cassandra.wait_for("message", check=check, timeout=5)
+		try:
+			msg = await cassandra.wait_for("message", check=check, timeout=5)
+		except:
+			continue
+			
 		try:
 			u = CUser(msg.author.id)
 			c = msg.content
