@@ -143,7 +143,7 @@ async def roulette(ctx):
 	wheel = Roulette()
 	board = await ctx.channel.send(str(wheel))
 	def check(message):
-		return message.author.id != cassandra.user.id and message.reference.message_id == ctx.message.message_id
+		return message.author.id != cassandra.user.id and message.reference.message_id == ctx.message.to_reference().message_id
 	
 	stop = datetime.datetime.now() + datetime.timedelta(minutes=1)
 	while datetime.datetime.now() <= stop:
