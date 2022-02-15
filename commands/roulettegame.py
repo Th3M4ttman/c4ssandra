@@ -80,6 +80,7 @@ class Bet():
 				
 				self.amt = int(parts[1])
 		if self.user.gbp < self.amt:
+			print("insufficient funds")
 			self.bet = None
 			self.colour = ""
 			self.numbers = []
@@ -153,12 +154,14 @@ async def roulette(ctx):
 			continue
 			
 		try:
+			print("Try bet")
 			u = CUser(msg.author.id)
-			c = msg.content
+			c = str(msg.content)
 			b = Bet(c, u)
 			if b.bet is None:
 				continue
 			wheel.add_bet(b)
+			print("Bet added")
 		except Exception as e:
 			print(e)
 	await board.edit(content="No More Bets!\nSpinning...")
