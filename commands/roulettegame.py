@@ -162,7 +162,7 @@ async def roulette(ctx):
 		except Exception as e:
 			print(e)
 	await board.edit(content="No More Bets!\nSpinning...")
-	await sleep(5)
+	await sleep(6)
 	wheel.spin()
-	await board.edit(content=str(board.number))
+	await board.edit(content=str(wheel.number))
 
