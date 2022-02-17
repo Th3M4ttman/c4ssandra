@@ -210,7 +210,7 @@ async def roulette(ctx):
 	out = wheel.colour + " " + str(wheel.number)
 	for bet in wheel.bets:
 		if bet.bet:
-			out += f"\n<@{bet.user.id}>: {bet.bet} ¥{intcomma(bet.paid)}"
+			out += f"\n{bet.user.name}: {bet.bet} ¥{intcomma(bet.paid)}"
 	await board.edit(content=out)
 	
 			
