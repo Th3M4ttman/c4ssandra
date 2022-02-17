@@ -168,7 +168,10 @@ async def roulette(ctx):
 	start = datetime.datetime.now()
 	
 	def check(message):
-		return message.author.id != cassandra.user.id and message.reference.message_id == board.to_reference().message_id and message.created_at > start
+		try:
+			return message.author.id != cassandra.user.id and message.reference.message_id == board.to_reference().message_id and message.created_at > start
+		except Exception as e:
+			print(e)
 	
 	
 	stop =  start + datetime.timedelta(minutes=1)
