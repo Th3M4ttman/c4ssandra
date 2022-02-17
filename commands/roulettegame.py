@@ -166,7 +166,7 @@ class Roulette():
 			betstr += f"\n{u.name} - "
 			for bet in self.bets:
 				if bet.user.discord == u.discord:
-					betstr += f"{bet.bet} ¥{intcomma(bet.paid)}, "
+					betstr += f"{bet.bet} {intcomma(bet.paid)}¥ "
 				
 		return f"Place your bets\n35:1 green / 0 - 36\n 1:1 red/black\n 1:1 high/low\n 1:1 odds/evens\n 2:1 third1/third2/third3 \n 2:1 row1/row2/row3\n\n(bet) (amount)\ne.g third1 50\n\n{betstr}"
 
@@ -230,8 +230,9 @@ async def roulette(ctx):
 	out = wheel.colour + " " + str(wheel.number)
 	for bet in wheel.bets:
 		if bet.bet:
-			out += f"\n{bet.user.name}: {bet.bet} ¥{intcomma(bet.paid)}"
+			out += f"\n{bet.user.name}: {bet.bet} {intcomma(bet.paid)}¥"
 	await trydelete(board)
+	board_img = discord.File(ROOT+"/board.png")
 	await ctx.channel.send(out, file=board_img)
 	
 			
