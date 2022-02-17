@@ -2,6 +2,7 @@ import random
 from humanize import intcomma
 import datetime
 from .db import CUser
+from .bot import ROOT
 from asyncio import sleep
 
 class Bet():
@@ -164,14 +165,18 @@ from .utils import trydelete
 async def roulette(ctx):
 	await trydelete(ctx)
 	wheel = Roulette()
-	board = await ctx.channel.send(str(wheel))
+	board_img = discord.File(ROOT+"/board.png")
+	spin_gif = discord.File(ROOT+"/wheel.gif")
+	
+	board = await ctx.channel.send(str(wheel), file=board_img)
 	start = datetime.datetime.now()
 	
 	def check(message):
 		try:
 			return message.author.id != cassandra.user.id and message.reference.message_id == board.to_reference().message_id and message.created_at > start
 		except Exception as e:
-			print(e)
+			#print(e)
+			pass
 	
 	
 	stop =  start + datetime.timedelta(minutes=1)
@@ -189,29 +194,30 @@ async def roulette(ctx):
 				
 			if check(msg):
 				try:
-					print("Try bet")
+					#print("Try bet")
 					u = CUser(msg.author.id)
 					c = str(msg.content)
 					b = Bet(c, u)
 					if b.bet is None:
 						continue
 					wheel.add_bet(b)
-					print("Bet added")
+					#print("Bet added")
 					await trydelete(msg)
 					await board.edit(content=str(wheel))
 				except Exception as e:
 					await board.edit(content=str(wheel))
-					print(e)
+					#print(e)
 			
-				
-	await board.edit(content="No More Bets!\nSpinning...")
+	
+	
+	await board.edit(content="No More Bets!\nSpinning...", file=spin_gif)
 	await sleep(6)
 	wheel.spin()
 	out = wheel.colour + " " + str(wheel.number)
 	for bet in wheel.bets:
 		if bet.bet:
 			out += f"\n{bet.user.name}: {bet.bet} ¥{intcomma(bet.paid)}"
-	await board.edit(content=out)
+	await board.edit(content=out, file=None)
 	
 			
 
