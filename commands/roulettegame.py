@@ -184,7 +184,8 @@ async def roulette(ctx):
 	processed = []
 	
 	while datetime.datetime.now() <= stop:
-		messages = await ctx.channel.history(limit=10).flatten()
+		messages = await ctx.channel.history(limit=20).flatten()
+		await sleep(10)
 
 		for msg in messages:
 			if msg.jump_url not in processed:
@@ -209,15 +210,16 @@ async def roulette(ctx):
 					#print(e)
 			
 	
-	
-	await board.edit(content="No More Bets!\nSpinning...", file=spin_gif)
-	await sleep(6)
+	await trydelete(board)
+	board = await ctx.channel.send("No More Bets!\nSpinning...", file=spin_gif)
+	await sleep(10)
 	wheel.spin()
 	out = wheel.colour + " " + str(wheel.number)
 	for bet in wheel.bets:
 		if bet.bet:
 			out += f"\n{bet.user.name}: {bet.bet} ¥{intcomma(bet.paid)}"
-	await board.edit(content=out, file=None)
+	await trydelete(board)
+	await ctx.channel.send(out)
 	
 			
 
