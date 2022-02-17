@@ -2,6 +2,7 @@ from copy import deepcopy
 from .bot import cassandra
 from .db import CUser, update
 from humanize import intcomma
+from .utils import trydelete
 level_range = []
 
 required = 100
@@ -49,10 +50,22 @@ def level_str(exp):
 async def lvl(ctx):
 	u = CUser(ctx.message.author.id)
 	await ctx.message.channel.send(f"{ctx.message.author.display_name}: {level_str(u.exp)}")
-	try:
-		await ctx.message.delete()
-	except:
-		pass
+	await trydelete(ctx)
+		
+@cassandra.command(name="lvls")
+async def lvls(ctx):
+	out = ""
+	for guild in cassandra.guilds:
+		for member in guild.members:
+			try:
+				u = CUser(member.id)
+				out += f"\n{u.name}: {level_str(u.exp)}"
+			except:
+				pass
+	
+	if out:
+		await ctx.message.channel.send(out)
+	await trydelete(ctx)
 	
 from discord.ext import commands
 
