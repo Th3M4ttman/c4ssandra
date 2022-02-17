@@ -531,7 +531,21 @@ async def medal(ctx):
 @cassandra.command(name="choicetest")
 async def choicetest(ctx):
 	u = CUser(ctx.author.id)
-	c = Choices("Choice Test", u.cinventory())
+	c = Choices("Choice Test", [
+	"Fuck",
+	"Poo",
+	"Ass",
+	"Slut",
+	"Cunt",
+	"Willy",
+	"Fart",
+	"Cum",
+	"Pussy",
+	"Shit",
+	"Wank",
+	"Porn Addict",
+	"Bumcrack",
+	"Arse Pipe"])
 	c = await c.send(ctx, cassandra)
 	if c:
 		await ctx.channel.send(f"Chose {c}")
