@@ -5,6 +5,7 @@ from .items import construct
 from .items import items as _items
 from copy import copy
 from .utils import Choices
+import discord
 
 
 PASS = os.environ['PASS']
@@ -133,6 +134,14 @@ class CUser():
 		self.stats = {}
 		self.exists = True
 		self.refresh()
+		
+	@property
+	def d_user(self) -> discord.User:
+		return cassandra.get_user(self.discord)
+		
+	@property
+	def name(self):
+		return self.d_user.display_name
 		
 	def cinventory(self):
 		out = []

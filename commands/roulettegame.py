@@ -130,9 +130,31 @@ class Roulette():
 				
 		
 	def __str__(self):
+		users = []
+		betstr = ""
+		for bet in self.bets:
+			if bet.user.discord not in users:
+				users.append(bet.user)
+				
+		
+		
+			
 		if self.number is not None:
-			return f"\n{self.colour} {self.number}\n"
-		return "Place your bets\n35:1 green / 0 - 36\n 1:1 red/black\n 1:1 high/low\n 1:1 odds/evens\n 2:1 third1/third2/third3 \n 2:1 row1/row2/row3\n\n(bet) (amount)\ne.g third1 50"
+			for u in users:
+				paid = 0
+				for bet in self.bets:
+					if bet.user.discord == u.discord:
+						paid += bet.paid
+				betstr += f"\n{u.name} - ¥{intcomma(bet.paid)}"
+					
+			return f"\n{self.colour} {self.number}\n\n{betstr}"
+		for u in users:
+			betstr += f"\n{u.name} - "
+			for bet in self.bets:
+				if bet.user.discord == u.discord:
+					betstr += f"{bet.bet} ¥{intcomma(bet.paid)}, "
+				
+		return f"Place your bets\n35:1 green / 0 - 36\n 1:1 red/black\n 1:1 high/low\n 1:1 odds/evens\n 2:1 third1/third2/third3 \n 2:1 row1/row2/row3\n\n(bet) (amount)\ne.g third1 50\n\n{betstr}"
 
 import discord
 from .bot import cassandra
@@ -143,28 +165,36 @@ async def roulette(ctx):
 	await trydelete(ctx)
 	wheel = Roulette()
 	board = await ctx.channel.send(str(wheel))
-	def check(message):
-		return message.author.id != cassandra.user.id and message.reference.message_id == ctx.message.to_reference().message_id
+	start = datetime.datetime.now()
 	
-	stop = datetime.datetime.now() + datetime.timedelta(minutes=1)
+	def check(message):
+		return message.author.id != cassandra.user.id and message.reference.message_id == board.to_reference().message_id and message.created_at > start
+	
+	
+	stop =  start + datetime.timedelta(minutes=1)
+	
+	
 	while datetime.datetime.now() <= stop:
-		try:
-			msg = await cassandra.wait_for("message", check=check, timeout=10)
-		except:
-			print("msg:", msg)
-			continue
-			
-		try:
-			print("Try bet")
-			u = CUser(msg.author.id)
-			c = str(msg.content)
-			b = Bet(c, u)
-			if b.bet is None:
-				continue
-			wheel.add_bet(b)
-			print("Bet added")
-		except Exception as e:
-			print(e)
+		messages = await ctx.channel.history(limit=10).flatten()
+
+		for msg in messages:
+			if check(msg):
+				try:
+					print("Try bet")
+					u = CUser(msg.author.id)
+					c = str(msg.content)
+					b = Bet(c, u)
+					if b.bet is None:
+						continue
+					wheel.add_bet(b)
+					print("Bet added")
+					await trydelete(msg)
+					await board.edit(str(wheel))
+				except Exception as e:
+					print(e)
+			else:
+				print(msg.created_at)
+				
 	await board.edit(content="No More Bets!\nSpinning...")
 	await sleep(6)
 	wheel.spin()
