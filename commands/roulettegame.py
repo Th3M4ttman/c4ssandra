@@ -198,7 +198,7 @@ async def roulette(ctx):
 	
 	while datetime.datetime.now() <= stop:
 		messages = await ctx.channel.history(limit=20).flatten()
-		await sleep(10)
+		await sleep(3)
 
 		for msg in messages:
 			if msg.jump_url not in processed:
