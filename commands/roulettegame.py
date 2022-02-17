@@ -198,9 +198,9 @@ async def roulette(ctx):
 					wheel.add_bet(b)
 					print("Bet added")
 					await trydelete(msg)
-					await board.edit(str(wheel))
+					await board.edit(content=str(wheel))
 				except Exception as e:
-					await board.edit(str(wheel))
+					await board.edit(content=str(wheel))
 					print(e)
 			
 				
