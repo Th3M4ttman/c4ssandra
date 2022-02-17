@@ -17,7 +17,7 @@ class Bet():
 			parts = bet.split(" ")
 			
 			if parts[0] in [str(i) for i in range(0, 37)]:
-				self.bet = "number"
+				self.bet = str(int(parts[0]))
 				self.numbers.append(int(parts[0]))
 				self.colour = None
 				self.amt = int(parts[1])
@@ -25,22 +25,27 @@ class Bet():
 				
 			elif parts[0].lower() in ("red", "black", "green"):
 				self.pay_ratio = 2
-				self.bet = "colour"
+				
 				if parts[0].lower() == "red":
+					self.bet = "Red"
 					self.colour = "Red"
 				elif parts[0].lower() == "black":
+					self.bet = "Black"
 					self.colour = "Black"
 				elif parts[0].lower() == "green":
+					self.bet = "Green"
 					self.colour = "Green"
 				
 				self.amt = int(parts[1])
 				
 			elif parts[0].lower() in ("high", "low"):
 				self.pay_ratio = 2
-				self.bet = "half"
+				
 				if parts[0].lower() == "high":
+					self.bet = "high"
 					self.numbers = range(19, 36)
 				elif parts[0].lower() == "low":
+					self.bet = "low"
 					self.numbers = range(1, 19)
 				
 				
@@ -48,10 +53,12 @@ class Bet():
 				
 			elif parts[0].lower() in ("odds", "evens"):
 				self.pay_ratio = 2
-				self.bet = "half"
+				
 				if parts[0].lower() == "evens":
+					self.bet = "evens"
 					self.numbers = [32, 4, 2, 34, 6, 36, 30, 8, 10, 24, 16, 20, 14, 22, 18, 28, 12, 26]
 				elif parts[0].lower() == "odds":
+					self.bet = "odds"
 					self.numbers = [15, 19, 21, 25, 17, 27, 13, 11, 23, 5, 33, 1, 31, 9, 29, 7, 35, 3]
 				
 				
@@ -62,10 +69,13 @@ class Bet():
 				self.pay_ratio = 3
 				if parts[0].lower() == "third1":
 					self.numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+					self.bet += " 1"
 				elif parts[0].lower() == "third2":
 					self.numbers = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+					self.bet += " 2"
 				elif parts[0].lower() == "third3":
 					self.numbers = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36]
+					self.bet += " 3"
 				
 				self.amt = int(parts[1])
 				
@@ -73,10 +83,13 @@ class Bet():
 				self.bet = "row"
 				self.pay_ratio = 3
 				if parts[0].lower() == "row3":
+					self.bet += " 3"
 					self.numbers = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]
 				elif parts[0].lower() == "row2":
+					self.bet += " 2"
 					self.numbers = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]
 				elif parts[0].lower() == "row1":
+					self.bet += " 1"
 					self.numbers = [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34]
 				
 				self.amt = int(parts[1])
@@ -219,7 +232,7 @@ async def roulette(ctx):
 		if bet.bet:
 			out += f"\n{bet.user.name}: {bet.bet} ¥{intcomma(bet.paid)}"
 	await trydelete(board)
-	await ctx.channel.send(out)
+	await ctx.channel.send(out, file=board_img)
 	
 			
 
